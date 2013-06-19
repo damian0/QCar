@@ -1,11 +1,10 @@
 #ifndef QOBDDEVICE_H
 #define QOBDDEVICE_H
 
+#include "obdpid.h"
+#include "obdpiddata.h"
 #include <QObject>
 #include <QList>
-
-class OBDPID;
-class OBDPIDData;
 
 class QOBDDevice : public QObject
 {
