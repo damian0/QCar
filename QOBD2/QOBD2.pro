@@ -20,8 +20,8 @@ SOURCES += main.cpp\
     obdpiddata.cpp \
     obdpid.cpp \
     atcommand.cpp \
-    qserialportdiscovery.cpp \
-    serialportsettings.cpp
+    serialportsettings.cpp \
+    qserialportdiscovery.cpp
 
 HEADERS  += mainwindow.h \
     qobddevice.h \
@@ -30,7 +30,7 @@ HEADERS  += mainwindow.h \
     obdpiddata.h \
     obdpid.h \
     atcommand.h \
-    qserialportdiscovery.h \
-    serialportsettings.h
+    serialportsettings.h \
+    qserialportdiscovery.h
 
 FORMS    += mainwindow.ui

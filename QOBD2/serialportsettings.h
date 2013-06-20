@@ -1,3 +1,8 @@
+/*!
+  \class SerialPortSettings
+  \brief Class containing main rs232 settings (data bits, stop bits, parity bits, ...)
+
+  */
 #ifndef SERIALPORTSETTINGS_H
 #define SERIALPORTSETTINGS_H
 

@@ -39,9 +39,9 @@ void QOBDDevice::pollingLoop()
 {
     while(isRunning)
     {
-        for(int i=0; i<PIDsToPollList.size(); i++)
+        foreach(OBDPID *PID, PIDsToPollList)
         {
-            requestPID(PIDsToPollList.at(i));
+            requestPID(PID);
         }
     }
 }

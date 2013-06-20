@@ -10,7 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);    
     SerialPortSettings settings;
-    qDebug() << QSerialPortDiscovery::getOBDSerialPortList(settings)->first().portName();
+    QSerialPortDiscovery spd;
+    qDebug() << spd.getOBDSerialPortList(settings)->first().portName();
 }
 
 MainWindow::~MainWindow()
