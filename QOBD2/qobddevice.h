@@ -5,6 +5,7 @@
 #include "obdpiddata.h"
 #include <QObject>
 #include <QList>
+#include <QHash>
 
 class QOBDDevice : public QObject
 {
@@ -19,19 +20,18 @@ public:
     void removePID(QString PIDName);
     void setPollInterval(QString PIDName, int interval);
 
-private:
+protected:
     bool isRunning;
-    QList<OBDPID*> allPIDsList;
-    QList<OBDPID*> PIDsToPollList;
+    QHash<QString,OBDPID*> allPIDsHash;
+    QHash<QString,OBDPID*> PIDsToPollHash;
 
     void pollingLoop();
-    OBDPIDData requestPID(OBDPID* PID);
+    int waitingTime();
+    virtual OBDPIDData requestPID(OBDPID* PID) = 0;
     
 signals:
     void newData(OBDPIDData PID);
-    
-public slots:
-    
+    void error(QString);
 };
 
 #endif // QOBDDEVICE_H

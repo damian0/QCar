@@ -21,7 +21,7 @@ QList<QSerialPortInfo> *QSerialPortDiscovery::getSerialPortList()
  * \return A QList<QSerialPortInfo>* containing all OBD devices
  */
 QList<QSerialPortInfo> *QSerialPortDiscovery::getOBDSerialPortList(SerialPortSettings settings)
-{
+{        
     QList<QSerialPortInfo>* allSerialPortList = getSerialPortList();
     QList<QSerialPortInfo>* obdSerialPortList = new QList<QSerialPortInfo>();
     QSerialPort serialPort;
