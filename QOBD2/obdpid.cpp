@@ -11,6 +11,7 @@ OBDPID::OBDPID()
     setDescription(DEFAULT_DESCRIPTION);
     setPollInterval(DEFAULT_POLL_INTERVAL);
     setFormula(DEFAULT_FORMULA);
+    pollTime.start();
 }
 
 OBDPID::OBDPID(QString pid, QString description, QString unit, int pollInterval, QString formula)
@@ -20,10 +21,13 @@ OBDPID::OBDPID(QString pid, QString description, QString unit, int pollInterval,
     setUnit(unit);
     setPollInterval(pollInterval);
     setFormula(formula);
+    pollTime.start();
 }
 
 OBDPIDData OBDPID::computeValue(QString data)
 {
+    OBDPIDData pidData;
+    return pidData;
 }
 
 void OBDPID::createFormulaInterpreter()

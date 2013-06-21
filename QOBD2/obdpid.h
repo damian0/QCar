@@ -26,7 +26,12 @@ public:
     void setUnit(const QString &value);
     void setPollTime(const QTime &value);
     void setPollInterval(int value);
-    void setFormula(const QString &value);        
+    void setFormula(const QString &value);
+
+    static const QString DEFAULT_PID;
+    static const QString DEFAULT_DESCRIPTION;
+    static const int DEFAULT_POLL_INTERVAL;
+    static const QString DEFAULT_FORMULA;
 
 private:
     void createFormulaInterpreter();
@@ -36,12 +41,7 @@ private:
     QString unit;
     QTime pollTime;
     int pollInterval;
-    QString formula;
-
-    static const QString DEFAULT_PID;
-    static const QString DEFAULT_DESCRIPTION;
-    static const int DEFAULT_POLL_INTERVAL;
-    static const QString DEFAULT_FORMULA;
+    QString formula;   
 };
 
 #endif // OBDPID_H

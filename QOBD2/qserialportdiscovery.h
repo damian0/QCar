@@ -6,8 +6,6 @@
 #ifndef QSERIALPORTDISCOVERY_H
 #define QSERIALPORTDISCOVERY_H
 
-#define READ_TIMEOUT 50
-
 #include "serialportsettings.h"
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
@@ -24,6 +22,8 @@ public:
 private:
     bool isOBDDevice(QSerialPort *serialPort);
     void openPort(QSerialPort *serialPort, SerialPortSettings *settings);
+
+    static const int READ_TIMEOUT;
 
 signals:
     void error(const QString);

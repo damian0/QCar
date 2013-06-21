@@ -11,23 +11,28 @@ class QOBDDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit QOBDDevice(QObject *parent = 0);
+    explicit QOBDDevice(QObject *parent = 0);    
 
-    void start();
     void stop();
     void pause();
     void addPID(QString PIDName);
     void removePID(QString PIDName);
     void setPollInterval(QString PIDName, int interval);
 
-protected:
-    bool isRunning;
-    QHash<QString,OBDPID*> allPIDsHash;
-    QHash<QString,OBDPID*> PIDsToPollHash;
+public slots:
+    void start();
 
+protected:
     void pollingLoop();
     int waitingTime();
     virtual OBDPIDData requestPID(OBDPID* PID) = 0;
+
+    bool isRunning;
+    bool isPaused;
+    QHash<QString,OBDPID*> allPIDsHash;
+    QHash<QString,OBDPID*> PIDsToPollHash;
+
+    static const int PAUSE_DELAY_MS;
     
 signals:
     void newData(OBDPIDData PID);

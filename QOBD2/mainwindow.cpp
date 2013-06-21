@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "qserialportdiscovery.h"
+#include "qelm327serial.h"
 
 #include <QDebug>
 #include <QThread>
@@ -16,10 +17,19 @@ MainWindow::MainWindow(QWidget *parent) :
     QSerialPortDiscovery serialPortDiscovery;   
     QList<QSerialPortInfo>* obdDevicesList = serialPortDiscovery.getOBDSerialPortList(settings);
 
-    foreach(const QSerialPortInfo &info, *obdDevicesList)
-    {
-        qDebug() << info.portName();
-    }
+    settings.setSerialPortInfo(obdDevicesList->first());
+
+    QThread *workingThread = new QThread();
+    QELM327Serial *elm327 = new QELM327Serial(settings);
+    elm327->moveToThread(workingThread);
+
+    connect(workingThread, &QThread::started, elm327, &QELM327Serial::start);
+
+    workingThread->start();
+
+    elm327->addPID("010C");
+    //elm327->addPID("0101");
+    //elm327->addPID("010aC");
 
     delete obdDevicesList;
 }

@@ -1,18 +1,27 @@
 #include "qobddevice.h"
 #include "obdpid.h"
 #include "obdpiddata.h"
+#include "pidloader.h"
+#include <QDebug>
 #include <QThread>
+
+const int QOBDDevice::PAUSE_DELAY_MS = 1000;
 
 QOBDDevice::QOBDDevice(QObject *parent) :
     QObject(parent)
 {
+    isPaused = false;
+    isRunning = false;
+
+    allPIDsHash = PIDLoader::loadPIDs("./pids/");    
 }
 
 void QOBDDevice::start()
 {
     if(!isRunning)
     {
-        pollingLoop();
+        isRunning = true;
+        pollingLoop();        
     }
 }
 
@@ -23,12 +32,13 @@ void QOBDDevice::stop()
 
 void QOBDDevice::pause()
 {
+    isPaused = !isPaused;
 }
 
 void QOBDDevice::addPID(QString PIDName)
 {
     if(allPIDsHash.contains(PIDName))
-    {
+    {        
         PIDsToPollHash[PIDName] = allPIDsHash[PIDName];
     }
 }
@@ -51,28 +61,35 @@ void QOBDDevice::pollingLoop()
 {
     while(isRunning)
     {
-        foreach(OBDPID *PID, PIDsToPollHash)
+        if(isPaused)
         {
-            if(PID->getPollTime().elapsed() >= PID->getPollInterval())
-            {
-            OBDPIDData data = requestPID(PID);
-            emit newData(data);
-            PID->getPollTime().restart();
-            }
+            QThread::msleep(PAUSE_DELAY_MS);
         }
-        this->thread()->wait(waitingTime());
+        else
+        {            
+            foreach(OBDPID *PID, PIDsToPollHash)
+            {                
+                if(PID->getPollTime().elapsed() >= PID->getPollInterval())
+                {                    
+                    OBDPIDData data = requestPID(PID);
+                    emit newData(data);
+                    PID->getPollTime().restart();
+                }
+            }
+            QThread::msleep(waitingTime());            
+        }
     }
 }
 
 int QOBDDevice::waitingTime()
 {
-    int max = 1000;
+    int max = (PIDsToPollHash.size() <= 0)?1000:0;
     foreach(OBDPID *PID, PIDsToPollHash)
     {
         if(PID->getPollInterval() > max)
             max = PID->getPollInterval();
     }
-    return max;
+    return max + 50;
 }
 
 OBDPIDData QOBDDevice::requestPID(OBDPID *PID)

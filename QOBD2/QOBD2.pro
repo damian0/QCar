@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui serialport
+QT       += core gui serialport xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     obdpid.cpp \
     atcommand.cpp \
     serialportsettings.cpp \
-    qserialportdiscovery.cpp
+    qserialportdiscovery.cpp \
+    pidloader.cpp \
+    pidxmlhandler.cpp
 
 HEADERS  += mainwindow.h \
     qobddevice.h \
@@ -31,6 +33,8 @@ HEADERS  += mainwindow.h \
     obdpid.h \
     atcommand.h \
     serialportsettings.h \
-    qserialportdiscovery.h
+    qserialportdiscovery.h \
+    pidloader.h \
+    pidxmlhandler.h
 
 FORMS    += mainwindow.ui

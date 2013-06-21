@@ -11,7 +11,8 @@
 class QELM327Serial : public QOBDDevice
 {
 public:
-    QELM327Serial(SerialPortSettings settings);
+    explicit QELM327Serial(SerialPortSettings settings, QObject *parent = 0);
+    ~QELM327Serial();
     void applySettings();
 
     /* Getters */
@@ -24,7 +25,7 @@ protected:
     OBDPIDData requestPID(OBDPID *PID);
 
 private:
-    QSerialPort serialPort;
+    QSerialPort *serialPort;
     SerialPortSettings settings;
 
     static const int READ_TIMEOUT;
