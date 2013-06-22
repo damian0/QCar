@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pid id="0101">
+	<unit>rpm</unit>
+	<description>Engine rpm</description>
+	<formula>( ( A * 256 ) + B ) / 4</formula>
+</pid>
+
