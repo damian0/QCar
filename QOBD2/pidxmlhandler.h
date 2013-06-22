@@ -18,14 +18,18 @@ protected:
     QHash<QString, OBDPID*>* pidsHash;
     QString currentData;
     QString currentPid;
+    QString currentName;
     QString currentUnit;
     QString currentDescription;
     QString currentFormula;
+    QString currentNbLines;
 
     static const QString PID_TAG;
+    static const QString NAME_TAG;
     static const QString UNIT_TAG;
     static const QString DESCRIPTION_TAG;
     static const QString FORMULA_TAG;
+    static const QString LINES_TAG;
     static const QString ID_ATTRIBUTE;
 };
 

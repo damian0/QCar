@@ -27,9 +27,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     workingThread->start();
 
+   // elm327->addPID("0100");
+    //
+   //elm327->addPID("010A");
     elm327->addPID("010C");
-    //elm327->addPID("0101");
-    //elm327->addPID("010aC");
+    elm327->addPID("010D");
 
     delete obdDevicesList;
 }

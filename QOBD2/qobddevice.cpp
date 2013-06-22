@@ -9,11 +9,8 @@ const int QOBDDevice::PAUSE_DELAY_MS = 1000;
 
 QOBDDevice::QOBDDevice(QObject *parent) :
     QObject(parent)
-{
-    isPaused = false;
-    isRunning = false;
-
-    allPIDsHash = PIDLoader::loadPIDs("./pids/");    
+{   
+    init();
 }
 
 void QOBDDevice::start()
@@ -25,9 +22,19 @@ void QOBDDevice::start()
     }
 }
 
+void QOBDDevice::init()
+{
+    isPaused = false;
+    isRunning = false;
+    isVehicleConnected = false;
+    name = "";
+
+    allPIDsHash = PIDLoader::loadPIDs("./pids/");
+}
+
 void QOBDDevice::stop()
 {
-    isRunning = false;
+    isRunning = false;    
 }
 
 void QOBDDevice::pause()
@@ -53,45 +60,69 @@ void QOBDDevice::setPollInterval(QString PIDName, int interval)
     OBDPID* pid = allPIDsHash[PIDName];
     if(pid)
     {
+        if(interval < requestTimeout) interval = requestTimeout;
         pid->setPollInterval(interval);
     }
 }
 
 void QOBDDevice::pollingLoop()
 {
+    QTime vehicleConnectedTime;
+    vehicleConnectedTime.start();
     while(isRunning)
-    {
-        if(isPaused)
+    {        
+        if(!isVehicleConnected)
         {
+            qDebug() << "trying to connect ...";
+            isVehicleConnected = searchVehicle();
+            QThread::msleep(PAUSE_DELAY_MS);
+        }
+        else if(isPaused)
+        {
+            qDebug() << "paused ...";
             QThread::msleep(PAUSE_DELAY_MS);
         }
         else
         {            
             foreach(OBDPID *PID, PIDsToPollHash)
             {                
-                if(PID->getPollTime().elapsed() >= PID->getPollInterval())
+                if(PID->getPollTime()->elapsed() >= PID->getPollInterval())
                 {                    
                     OBDPIDData data = requestPID(PID);
                     emit newData(data);
-                    PID->getPollTime().restart();
+                    PID->getPollTime()->restart();
                 }
             }
-            QThread::msleep(waitingTime());            
+            QThread::msleep(waitingTime());
         }
     }
 }
 
 int QOBDDevice::waitingTime()
 {
-    int max = (PIDsToPollHash.size() <= 0)?1000:0;
+    int min = 1000;
     foreach(OBDPID *PID, PIDsToPollHash)
     {
-        if(PID->getPollInterval() > max)
-            max = PID->getPollInterval();
-    }
-    return max + 50;
+        if(PID->getPollInterval() < min)
+            min = PID->getPollInterval();
+    }   
+    return min-requestTimeout;
+}
+
+bool QOBDDevice::searchVehicle()
+{
 }
 
 OBDPIDData QOBDDevice::requestPID(OBDPID *PID)
 {
+}
+
+QString QOBDDevice::getName() const
+{
+    return name;
+}
+
+void QOBDDevice::setName(const QString &value)
+{
+    name = value;
 }

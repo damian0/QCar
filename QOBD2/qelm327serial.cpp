@@ -1,12 +1,15 @@
 #include "qelm327serial.h"
 #include <QDebug>
+#include <QStringListIterator>
+#include <QRegExp>
 
-const int QELM327Serial::READ_TIMEOUT = 50;
+const int QELM327Serial::READ_TIMEOUT    = 1000;
 
 QELM327Serial::QELM327Serial(SerialPortSettings settings, QObject *parent):QOBDDevice(parent)
 {
     setSettings(settings);
     applySettings();
+    init();
 }
 
 QELM327Serial::~QELM327Serial()
@@ -47,7 +50,7 @@ void QELM327Serial::applySettings()
         emit error(QString(tr("failed to set baud rate port %1")).arg(serialPort->portName()));
         return;
     }
-    serialPort->clear();
+    serialPort->clear();    
 }
 
 SerialPortSettings QELM327Serial::getSettings() const
@@ -62,24 +65,62 @@ void QELM327Serial::setSettings(const SerialPortSettings &value)
 }
 
 OBDPIDData QELM327Serial::requestPID(OBDPID *PID)
+{        
+    int nbLines = PID->getNbLines();
+    QString pattern = (!nbLines)?"%1\r":"%1%2\r";
+    QString request = QString(pattern).arg(PID->getPid()).arg(nbLines);
+
+    QStringList response = writeData(request, requestTimeout);
+    qDebug()<< response;
+    double value = PID->computeValue(response);
+    OBDPIDData pidData(PID->getPid(), PID->getName(), PID->getDescription(), value, PID->getUnit());
+    return pidData;
+}
+
+bool QELM327Serial::searchVehicle()
+{    
+    QStringList response = writeData("0100\r", 4*READ_TIMEOUT);
+    return !response.contains("UNABLE TO CONNECT>") && !response.contains("SEARCHING...");
+}
+
+void QELM327Serial::init()
 {
-    QString response = "";
-    QByteArray request = PID->getPid().toLocal8Bit();    
-    //serialPort->write(request);
-    //serialPort->write(QString('\r').toLocal8Bit());
+    QOBDDevice::init();
+    requestTimeout = 40;
+    name = writeData("ATZ\r", READ_TIMEOUT).first();
+    qDebug() << "Device :" << name;
+    qDebug() << "Auto-select protocol :" << writeData("ATSP0\r", READ_TIMEOUT).first();
+}
 
-    for(int i = 0;i < PID->getPid().size(); i++)
-    {
-        serialPort->write(QString(PID->getPid()[i]).toLocal8Bit());
+QStringList QELM327Serial::writeData(QString data, int timeout)
+{    
+    QString buffer;
+    serialPort->write(data.toLocal8Bit());
+
+    if (serialPort->waitForBytesWritten(timeout))
+    {        
+        while(serialPort->waitForReadyRead(timeout))
+        {
+            buffer += serialPort->readAll();
+        }
     }
-    serialPort->write(QString('\r').toLocal8Bit());
+    //removes the request from response
+    buffer.replace(data, "");
+    return parseData(buffer);
+}
 
-    if (serialPort->waitForBytesWritten(READ_TIMEOUT)) {
-        while(serialPort->waitForReadyRead(READ_TIMEOUT))
-            response += serialPort->readAll();
-    }
+QStringList QELM327Serial::parseData(QString data)
+{
+    QStringList splittedData = data.split('\r');
 
-    qDebug() << request <<response;
+    //trim all strings
+    splittedData.replaceInStrings(QRegExp("^\\s*||\\s*$"), "");
+    //removes all \r
+    splittedData.replaceInStrings(QString("\r"), QString(""));
+    //removes all >
+    splittedData.replaceInStrings(QString(">"), QString(""));
+    //removes all empty strings
+    splittedData.removeAll(QString(""));
 
-    return PID->computeValue(response);
+    return splittedData;
 }

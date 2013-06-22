@@ -19,16 +19,27 @@ public:
     void removePID(QString PIDName);
     void setPollInterval(QString PIDName, int interval);
 
+    /* Getters */
+    QString getName() const;
+
+    /* Setters */
+    void setName(const QString &value);
+
 public slots:
     void start();
 
 protected:
+    void init();
     void pollingLoop();
     int waitingTime();
     virtual OBDPIDData requestPID(OBDPID* PID) = 0;
+    virtual bool searchVehicle() = 0;
 
     bool isRunning;
     bool isPaused;
+    bool isVehicleConnected;
+    int requestTimeout;
+    QString name;
     QHash<QString,OBDPID*> allPIDsHash;
     QHash<QString,OBDPID*> PIDsToPollHash;
 

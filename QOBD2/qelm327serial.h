@@ -5,6 +5,7 @@
 #include "obdpid.h"
 #include "obdpiddata.h"
 #include "serialportsettings.h"
+#include <QStringList>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
@@ -19,16 +20,21 @@ public:
     SerialPortSettings getSettings() const;
 
     /* Setters */
-    void setSettings(const SerialPortSettings &value);
+    void setSettings(const SerialPortSettings &value);    
 
 protected:
     OBDPIDData requestPID(OBDPID *PID);
+    bool searchVehicle();
+    void init();
 
 private:
+    QStringList writeData(QString data, int timeout);
+    QStringList parseData(QString data);
+
     QSerialPort *serialPort;
     SerialPortSettings settings;
 
-    static const int READ_TIMEOUT;
+    static const int READ_TIMEOUT;    
 };
 
 #endif // QELM327SERIAL_H

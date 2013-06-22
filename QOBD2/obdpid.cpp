@@ -1,33 +1,51 @@
 #include "obdpid.h"
 
-const QString OBDPID::DEFAULT_PID         = "010C";
+const QString OBDPID::DEFAULT_PID         = "0100";
+const QString OBDPID::DEFAULT_NAME        = "No name";
 const QString OBDPID::DEFAULT_DESCRIPTION = "No description";
 const int OBDPID::DEFAULT_POLL_INTERVAL   = 100;
 const QString OBDPID::DEFAULT_FORMULA     = "";
+const int OBDPID::DEFAULT_NB_LINES        = 0;
 
 OBDPID::OBDPID()
 {
     setPid(DEFAULT_PID);
+    setName(DEFAULT_NAME);
     setDescription(DEFAULT_DESCRIPTION);
     setPollInterval(DEFAULT_POLL_INTERVAL);
     setFormula(DEFAULT_FORMULA);
-    pollTime.start();
+    setNbLines(DEFAULT_NB_LINES);
+    pollTime = new QTime();
+    pollTime->start();
 }
 
-OBDPID::OBDPID(QString pid, QString description, QString unit, int pollInterval, QString formula)
+OBDPID::OBDPID(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines)
 {
     setPid(pid);
+    setName(name);
     setDescription(description);
     setUnit(unit);
     setPollInterval(pollInterval);
     setFormula(formula);
-    pollTime.start();
+    setNbLines(nbLines);    
+    pollTime = new QTime();
+    pollTime->start();
 }
 
-OBDPIDData OBDPID::computeValue(QString data)
+OBDPID::~OBDPID()
 {
-    OBDPIDData pidData;
-    return pidData;
+    delete pollTime;
+}
+
+double OBDPID::computeValue(QStringList data)
+{
+    QString line1 = data.first();
+    line1.replace(QString(" "), QString(""));
+    if(line1.at(0) == '4' && line1.at(1) == '1')
+    {
+        line1 = line1.right(line1.length()-2);
+    }
+    return -1.0;
 }
 
 void OBDPID::createFormulaInterpreter()
@@ -54,12 +72,12 @@ void OBDPID::setDescription(const QString &value)
     description = value;
 }
 
-QTime OBDPID::getPollTime() const
+QTime *OBDPID::getPollTime() const
 {
     return pollTime;
 }
 
-void OBDPID::setPollTime(const QTime &value)
+void OBDPID::setPollTime(QTime *value)
 {
     pollTime = value;
 }
@@ -92,4 +110,24 @@ QString OBDPID::getUnit() const
 void OBDPID::setUnit(const QString &value)
 {
     unit = value;
+}
+
+int OBDPID::getNbLines() const
+{
+    return nbLines;
+}
+
+void OBDPID::setNbLines(int value)
+{
+    nbLines = value;
+}
+
+QString OBDPID::getName() const
+{
+    return name;
+}
+
+void OBDPID::setName(const QString &value)
+{
+    name = value;
 }
