@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "qserialportdiscovery.h"
-#include "qelm327serial.h"
+#include "tools/qserialportdiscovery.h"
+#include "obd/qelm327serial.h"
 
 #include <QDebug>
 #include <QThread>

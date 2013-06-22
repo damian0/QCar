@@ -11,30 +11,30 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = QOBD2
 TEMPLATE = app
 
+INCLUDEPATH += . tools obd xml
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-    qobddevice.cpp \
-    qelm327simulator.cpp \
-    qelm327serial.cpp \
-    obdpiddata.cpp \
-    obdpid.cpp \
-    atcommand.cpp \
-    serialportsettings.cpp \
-    qserialportdiscovery.cpp \
-    pidloader.cpp \
-    pidxmlhandler.cpp
-
-HEADERS  += mainwindow.h \
-    qobddevice.h \
-    qelm327simulator.h \
-    qelm327serial.h \
-    obdpiddata.h \
-    obdpid.h \
-    atcommand.h \
-    serialportsettings.h \
-    qserialportdiscovery.h \
-    pidloader.h \
-    pidxmlhandler.h
-
-FORMS    += mainwindow.ui
+# Input
+HEADERS += mainwindow.h \
+           obd/atcommand.h \
+           obd/obdpid.h \
+           obd/obdpiddata.h \
+           obd/qelm327serial.h \
+           obd/qelm327simulator.h \
+           obd/qobddevice.h \
+           tools/pidloader.h \
+           tools/qserialportdiscovery.h \
+           tools/serialportsettings.h \
+           xml/pidxmlhandler.h
+FORMS += mainwindow.ui
+SOURCES += main.cpp \
+           mainwindow.cpp \
+           obd/atcommand.cpp \
+           obd/obdpid.cpp \
+           obd/obdpiddata.cpp \
+           obd/qelm327serial.cpp \
+           obd/qelm327simulator.cpp \
+           obd/qobddevice.cpp \
+           tools/pidloader.cpp \
+           tools/qserialportdiscovery.cpp \
+           tools/serialportsettings.cpp \
+           xml/pidxmlhandler.cpp
