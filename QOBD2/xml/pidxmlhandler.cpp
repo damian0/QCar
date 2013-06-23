@@ -1,7 +1,7 @@
 #include "pidxmlhandler.h"
 #include <QDebug>
 
-const QString PIDXMLHandler::PID_TAG         = "pid";
+const QString PIDXMLHandler::PID_TAG         = "obdpid";
 const QString PIDXMLHandler::NAME_TAG        = "name";
 const QString PIDXMLHandler::UNIT_TAG        = "unit";
 const QString PIDXMLHandler::DESCRIPTION_TAG = "description";

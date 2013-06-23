@@ -12,7 +12,9 @@ QHash<QString, OBDPID *> &PIDLoader::loadPIDs(QString directory)
     {
         if(fileInfo.isFile() && fileInfo.fileName() != "." && fileInfo.fileName() != ".." && fileInfo.completeSuffix() == "xml")
         {
-            parsePIDFile(fileInfo.absoluteFilePath(), h);
+            QString filePath = fileInfo.absoluteFilePath();
+            if(isPIDFileValid(filePath, "./pids/obd_pid.xsd"))
+                parsePIDFile(filePath, h);
         }        
     }
 
@@ -28,4 +30,25 @@ void PIDLoader::parsePIDFile(QString filename, QHash<QString, OBDPID*>* h)
     xmlReader.setContentHandler(&handler);
     xmlReader.setErrorHandler(&handler);
     xmlReader.parse(&source);
+}
+
+bool PIDLoader::isPIDFileValid(QString filename, QString schemaFilename)
+{
+    QFile schemaFile(schemaFilename);
+    if(!schemaFile.open(QIODevice::ReadOnly))
+        return false;
+
+    QXmlSchema schema;
+    schema.load(&schemaFile);
+    schemaFile.close();
+
+    if (schema.isValid()) {
+        QFile file(filename);
+        file.open(QIODevice::ReadOnly);
+
+        QXmlSchemaValidator validator(schema);
+        if (validator.validate(&file, QUrl::fromLocalFile(file.fileName())))
+            return true;
+    }
+    return false;
 }

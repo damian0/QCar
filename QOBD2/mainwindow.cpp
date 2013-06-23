@@ -20,18 +20,19 @@ MainWindow::MainWindow(QWidget *parent) :
     settings.setSerialPortInfo(obdDevicesList->first());
 
     QThread *workingThread = new QThread();
-    QELM327Serial *elm327 = new QELM327Serial(settings);
-    elm327->moveToThread(workingThread);
+    QOBDDevice *elm327 = new QELM327Serial(settings);
+    elm327->moveToThread(workingThread);    
 
     connect(workingThread, &QThread::started, elm327, &QELM327Serial::start);
 
-    workingThread->start();
+    workingThread->start();    
 
-   // elm327->addPID("0100");
-    //
-   //elm327->addPID("010A");
-    elm327->addPID("010C");
-    elm327->addPID("010D");
+    /* Adding some PID's to the polling loop */
+    elm327->addPID("010C");  //Engine RPM
+    elm327->addPID("010D");  //Vehicle speed
+
+    /* Hashtable containing PID's names loaded from XML files */
+    qDebug() << elm327->availablePIDs();
 
     delete obdDevicesList;
 }

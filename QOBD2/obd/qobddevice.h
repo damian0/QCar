@@ -18,6 +18,7 @@ public:
     void addPID(QString PIDName);
     void removePID(QString PIDName);
     void setPollInterval(QString PIDName, int interval);
+    QHash<QString, QString> availablePIDs();
 
     /* Getters */
     QString getName() const;

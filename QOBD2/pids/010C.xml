@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<pid id="010C">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<obdpid id="010C" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="obd_pid.xsd">
 	<name>Engine RPM</name>
 	<description>Engine rpm</description>
 	<unit>rpm</unit>
 	<formula></formula>
-	<lines>1</lines>
-</pid>
-
+	<lines>5</lines>
+</obdpid>

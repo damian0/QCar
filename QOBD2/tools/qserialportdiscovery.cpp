@@ -1,6 +1,6 @@
 #include "qserialportdiscovery.h"
 
-const int QSerialPortDiscovery::READ_TIMEOUT = 50;
+const int QSerialPortDiscovery::READ_TIMEOUT = 100;
 
 QSerialPortDiscovery::QSerialPortDiscovery(QObject *parent) :
     QObject(parent)

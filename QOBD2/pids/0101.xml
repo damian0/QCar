@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pid id="0101">
-	<unit>rpm</unit>
-	<description>Engine rpm</description>
+<obdpid id="0101" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="obd_pid.xsd">
+	<name>Monitor status</name>
+	<description>Monitor status</description>
+	<unit>-</unit>
 	<formula>( ( A * 256 ) + B ) / 4</formula>
-</pid>
+	<lines>1</lines>
+</obdpid>
+
 

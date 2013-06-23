@@ -105,7 +105,8 @@ QStringList QELM327Serial::writeData(QString data, int timeout)
         }
     }
     //removes the request from response
-    buffer.replace(data, "");
+    QString pattern = QString("^%1").arg(data);
+    buffer.replace(QRegExp(pattern), "");
     return parseData(buffer);
 }
 

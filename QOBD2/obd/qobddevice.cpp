@@ -65,6 +65,18 @@ void QOBDDevice::setPollInterval(QString PIDName, int interval)
     }
 }
 
+QHash<QString, QString> QOBDDevice::availablePIDs()
+{
+    QHash<QString, QString> availablePIDsHash;
+
+    foreach(const OBDPID* PID, allPIDsHash)
+    {
+        availablePIDsHash[PID->getPid()] = PID->getName();
+    }
+
+    return availablePIDsHash;
+}
+
 void QOBDDevice::pollingLoop()
 {
     QTime vehicleConnectedTime;
@@ -107,14 +119,6 @@ int QOBDDevice::waitingTime()
             min = PID->getPollInterval();
     }   
     return min-requestTimeout;
-}
-
-bool QOBDDevice::searchVehicle()
-{
-}
-
-OBDPIDData QOBDDevice::requestPID(OBDPID *PID)
-{
 }
 
 QString QOBDDevice::getName() const
