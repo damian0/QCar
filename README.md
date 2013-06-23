@@ -15,7 +15,8 @@ Car computer software written in Qt/QML &amp; C++
     - Data interpreter using "formula" field from XML files
   - GUI
     - ODB dashboard
-    - Music / Video player      
+    - Music / Video player
+  - Phone calls processing (not sure)
   - GPS (not sure)  
   - Any good ideas I'll find :)
     
