@@ -13,7 +13,7 @@ public:
     static QHash<QString, OBDPID *> &loadPIDs(QString directory);
 private:
     static void parsePIDFile(QString filename, QHash<QString, OBDPID *> *h);
-    static bool isPIDFileValid(QString filename, QString schemaFilename);
+    static bool isPIDFileValid(QString filename);
 };
 
 #endif // PIDLOADER_H
