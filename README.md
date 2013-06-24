@@ -1,7 +1,7 @@
 QCar
 ====
 
-Car computer software written in Qt/QML &amp; C++
+Cross-platform car computer software written in Qt/QML &amp; C++
 
 <h4>Current features</h4>
   - OBD II part
