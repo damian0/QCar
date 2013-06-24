@@ -16,6 +16,9 @@ Car computer software written in Qt/QML &amp; C++
   - GUI
     - ODB dashboard
     - Music / Video player
+    - Youtube integration
+    - Spotify integration
+    - Web browser
   - Phone calls processing (not sure)
   - GPS (not sure)  
   - Any good ideas I'll find :)
