@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obdpid id="0100" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="obd_pid.xsd">
+	<name>Available PID's</name>
+	<description>Available PID's</description>
+	<unit>-</unit>
+	<formula>( ( A * 256 ) + B ) / 4</formula>
+	<lines>1</lines>
+</obdpid>
+

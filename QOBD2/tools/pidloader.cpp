@@ -35,7 +35,8 @@ void PIDLoader::parsePIDFile(QString filename, QHash<QString, OBDPID*>* h)
 bool PIDLoader::isPIDFileValid(QString filename)
 {
     QFile file(filename);
-    file.open(QIODevice::ReadOnly);
+    if(!file.open(QIODevice::ReadOnly))
+        return false;
 
     QXmlSchemaValidator validator;
     if (validator.validate(&file, QUrl::fromLocalFile(file.fileName())))

@@ -1,4 +1,5 @@
 #include "obdpid.h"
+#include <QDebug>
 
 const QString OBDPID::DEFAULT_PID         = "0100";
 const QString OBDPID::DEFAULT_NAME        = "No name";
@@ -39,11 +40,11 @@ OBDPID::~OBDPID()
 
 double OBDPID::computeValue(QStringList data)
 {
-    QString line1 = data.first();
-    line1.replace(QString(" "), QString(""));
-    if(line1.at(0) == '4' && line1.at(1) == '1')
+    QString lines = data.join("");
+    lines.replace(QString(" "), QString(""));
+    if(lines.at(0) == '4' && lines.at(1) == '1')
     {
-        line1 = line1.right(line1.length()-2);
+        lines = lines.mid(2);
     }
     return -1.0;
 }
