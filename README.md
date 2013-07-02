@@ -21,7 +21,7 @@ Cross-platform car computer software written in Qt/QML &amp; C++
     - Spotify integration
     - Web browser
   - Phone calls processing (not sure)
-  - GPS (not sure)  
+  - GPS Navigation (not sure)  
   - Any good ideas I'll find :)
     
 The current OBD II part has been tested shortly on an Opel Corsa D with an OBDLink SX.
