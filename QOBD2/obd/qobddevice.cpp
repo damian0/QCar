@@ -13,6 +13,14 @@ QOBDDevice::QOBDDevice(QObject *parent) :
     init();
 }
 
+QOBDDevice::~QOBDDevice()
+{
+    foreach(OBDPID* pid, allPIDsHash)
+    {
+        delete pid;
+    }
+}
+
 void QOBDDevice::start()
 {
     if(!isRunning)

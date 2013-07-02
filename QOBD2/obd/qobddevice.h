@@ -11,7 +11,8 @@ class QOBDDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit QOBDDevice(QObject *parent = 0);    
+    explicit QOBDDevice(QObject *parent = 0);
+    virtual ~QOBDDevice();
 
     void stop();
     void pause();
