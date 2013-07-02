@@ -27,7 +27,7 @@ HEADERS += mainwindow.h \
            xml/pidxmlhandler.h \
            obd/interpreter/arithmeticevaluator.h \
     obd/interpreter/arithmetictools.h \
-    tools/treenode.h
+    obd/interpreter/treenode.h
 FORMS += mainwindow.ui
 SOURCES += main.cpp \
            mainwindow.cpp \
@@ -43,4 +43,4 @@ SOURCES += main.cpp \
            xml/pidxmlhandler.cpp \
            obd/interpreter/arithmeticevaluator.cpp \
     obd/interpreter/arithmetictools.cpp \
-    tools/treenode.cpp
+    obd/interpreter/treenode.cpp

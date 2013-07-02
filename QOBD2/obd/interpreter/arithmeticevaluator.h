@@ -1,7 +1,7 @@
 #ifndef ARITHMETICEVALUATOR_H
 #define ARITHMETICEVALUATOR_H
 
-#include "../tools/treenode.h"
+#include "treenode.h"
 #include <QString>
 #include <QHash>
 
