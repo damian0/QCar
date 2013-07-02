@@ -70,10 +70,9 @@ OBDPIDData QELM327Serial::requestPID(OBDPID *PID)
     QString pattern = (!nbLines)?"%1\r":"%1%2\r";
     QString request = QString(pattern).arg(PID->getPid()).arg(nbLines);
 
-    QStringList response = writeData(request, requestTimeout);
-    qDebug()<< response;
+    QStringList response = writeData(request, requestTimeout);    
     double value = PID->computeValue(response);
-    OBDPIDData pidData(PID->getPid(), PID->getName(), PID->getDescription(), value, PID->getUnit());
+    OBDPIDData pidData(PID->getPid(), PID->getName(), PID->getDescription(), value, PID->getUnit());    
     return pidData;
 }
 

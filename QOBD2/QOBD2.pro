@@ -24,7 +24,10 @@ HEADERS += mainwindow.h \
            tools/pidloader.h \
            tools/qserialportdiscovery.h \
            tools/serialportsettings.h \
-           xml/pidxmlhandler.h
+           xml/pidxmlhandler.h \
+           obd/interpreter/arithmeticevaluator.h \
+    obd/interpreter/arithmetictools.h \
+    tools/treenode.h
 FORMS += mainwindow.ui
 SOURCES += main.cpp \
            mainwindow.cpp \
@@ -37,4 +40,7 @@ SOURCES += main.cpp \
            tools/pidloader.cpp \
            tools/qserialportdiscovery.cpp \
            tools/serialportsettings.cpp \
-           xml/pidxmlhandler.cpp
+           xml/pidxmlhandler.cpp \
+           obd/interpreter/arithmeticevaluator.cpp \
+    obd/interpreter/arithmetictools.cpp \
+    tools/treenode.cpp

@@ -15,23 +15,23 @@ OBDPIDData::OBDPIDData()
     setUnit(DEFAULT_UNIT);
 }
 
-OBDPIDData::OBDPIDData(QString PID, QString name, QString description, double value, QString unit)
+OBDPIDData::OBDPIDData(QString pid, QString name, QString description, double value, QString unit)
 {  
-    setPID(PID);
+    setPID(pid);
     setName(name);
     setDescription(description);
     setValue(value);
     setUnit(unit);
 }
 
-QString OBDPIDData::getPID() const
+QString OBDPIDData::getPid() const
 {
-    return PID;
+    return pid;
 }
 
 void OBDPIDData::setPID(const QString &value)
 {
-    PID = value;
+    this->pid = value;
 }
 
 QString OBDPIDData::getDescription() const
@@ -41,7 +41,7 @@ QString OBDPIDData::getDescription() const
 
 void OBDPIDData::setDescription(const QString &value)
 {
-    description = value;
+    this->description = value;
 }
 
 double OBDPIDData::getValue() const
@@ -51,7 +51,7 @@ double OBDPIDData::getValue() const
 
 void OBDPIDData::setValue(double value)
 {
-    value = value;
+    this->value = value;
 }
 
 QString OBDPIDData::getUnit() const
@@ -61,7 +61,7 @@ QString OBDPIDData::getUnit() const
 
 void OBDPIDData::setUnit(const QString &value)
 {
-    unit = value;
+    this->unit = value;
 }
 
 QString OBDPIDData::getName() const
@@ -71,5 +71,5 @@ QString OBDPIDData::getName() const
 
 void OBDPIDData::setName(const QString &value)
 {
-    name = value;
+    this->name = value;
 }

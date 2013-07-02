@@ -1,3 +1,7 @@
+/*!
+  \class QSerialPortDiscovery
+  \brief The QSerialPortDiscovery class lists all serial ports plugged in the system and lists also all OBD devices on the system
+  */
 #include "qserialportdiscovery.h"
 
 const int QSerialPortDiscovery::READ_TIMEOUT = 100;
@@ -9,8 +13,9 @@ QSerialPortDiscovery::QSerialPortDiscovery(QObject *parent) :
 
 /*!
  * \fn QList<QSerialPortInfo> *QSerialPortDiscovery::getSerialPortList()
+ *
  * \brief Lists all serial ports on the system, don't forget to delete the QList as soon as you don't use anymore!
- * \return A QList<QSerialPortInfo>* containing all serial ports
+ * Returns A QList<QSerialPortInfo>* containing all serial ports
  */
 QList<QSerialPortInfo> *QSerialPortDiscovery::getSerialPortList()
 {
@@ -19,8 +24,9 @@ QList<QSerialPortInfo> *QSerialPortDiscovery::getSerialPortList()
 
 /*!
  * \fn QList<QSerialPortInfo> *QSerialPortDiscovery::getOBDSerialPortList(SerialPortSettings settings)
+ *
  * \brief Lists all serial ports that are OBD devices, testing them with \a settings as rs232 settings. Don't forget to delete the QList as soon as you don't use anymore!
- * \return A QList<QSerialPortInfo>* containing all OBD devices
+ * Returns A QList<QSerialPortInfo>* containing all OBD devices
  */
 QList<QSerialPortInfo> *QSerialPortDiscovery::getOBDSerialPortList(SerialPortSettings settings)
 {        
@@ -44,11 +50,12 @@ QList<QSerialPortInfo> *QSerialPortDiscovery::getOBDSerialPortList(SerialPortSet
 
 /*!
  * \fn bool QSerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
+ *
  * \brief Tests if \a serialPort is an OBD device
  *
- * A serial port is considered as an OBD device if it answers "OK" to a "ATSP0\r" request
+ * A serial port is considered as an OBD device if it answers "OK" to a "ATSP0\\r" request
  *
- * \return A QList<QSerialPortInfo>* containing all OBD devices
+ * Returns A QList<QSerialPortInfo>* containing all OBD devices
  */
 bool QSerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
 {
@@ -68,6 +75,7 @@ bool QSerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
 
 /*!
  * \fn void QSerialPortDiscovery::openPort(QSerialPort *serialPort, SerialPortSettings *settings)
+ *
  * \brief Try to configure \a serialPort with \a settings
  */
 void QSerialPortDiscovery::openPort(QSerialPort *serialPort, SerialPortSettings *settings)

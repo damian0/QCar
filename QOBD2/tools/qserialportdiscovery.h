@@ -1,8 +1,3 @@
-/*!
-  \class QSerialPortDiscovery
-  \brief The QSerialPortDiscovery class lists all serial ports plugged in the system and lists also all OBD devices on the system
-  */
-
 #ifndef QSERIALPORTDISCOVERY_H
 #define QSERIALPORTDISCOVERY_H
 

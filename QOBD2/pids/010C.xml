@@ -3,6 +3,6 @@
 	<name>Engine RPM</name>
 	<description>Engine rpm</description>
 	<unit>rpm</unit>
-	<formula></formula>
-	<lines>5</lines>
+	<formula>( ( A * 256 ) + B ) / 4</formula>
+	<lines>1</lines>
 </obdpid>

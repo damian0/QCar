@@ -7,10 +7,10 @@ class OBDPIDData
 {
 public:
     OBDPIDData();
-    OBDPIDData(QString PID, QString name, QString description, double value, QString unit);
+    OBDPIDData(QString pid, QString name, QString description, double value, QString unit);
 
     /* Getters */
-    QString getPID() const;
+    QString getPid() const;
     QString getName() const;
     QString getDescription() const;
     double getValue() const;
@@ -25,7 +25,7 @@ public:
 
 private:
 
-    QString PID;
+    QString pid;
     QString name;
     QString description;
     double value;

@@ -3,7 +3,7 @@
 	<name>Speed</name>
 	<description>Vehicle speed</description>
 	<unit>km/h</unit>
-	<formula></formula>
+	<formula>A</formula>
 	<lines>1</lines>
 </obdpid>
 

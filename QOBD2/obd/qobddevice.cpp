@@ -30,6 +30,8 @@ void QOBDDevice::init()
     name = "";
 
     allPIDsHash = PIDLoader::loadPIDs("./pids/");
+
+    qRegisterMetaType<OBDPIDData>("OBDPIDData");
 }
 
 void QOBDDevice::stop()
@@ -97,7 +99,7 @@ void QOBDDevice::pollingLoop()
         else
         {            
             foreach(OBDPID *PID, PIDsToPollHash)
-            {                
+            {
                 if(PID->getPollTime()->elapsed() >= PID->getPollInterval())
                 {                    
                     OBDPIDData data = requestPID(PID);

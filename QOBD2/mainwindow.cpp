@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "tools/qserialportdiscovery.h"
 #include "obd/qelm327serial.h"
+#include "obd/interpreter/arithmeticevaluator.h"
 
 #include <QDebug>
 #include <QThread>
@@ -34,10 +35,17 @@ MainWindow::MainWindow(QWidget *parent) :
     /* Hashtable containing PID's names loaded from XML files */
     qDebug() << elm327->availablePIDs();
 
+    connect(elm327, &QELM327Serial::newData, this, &MainWindow::handlePIDData);
+
     delete obdDevicesList;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::handlePIDData(OBDPIDData data)
+{
+    qDebug() << data.getName() << "(" << data.getPid() << "):" << data.getValue() << data.getUnit();
 }

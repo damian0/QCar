@@ -18,6 +18,8 @@ OBDPID::OBDPID()
     setNbLines(DEFAULT_NB_LINES);
     pollTime = new QTime();
     pollTime->start();
+
+    createFormulaInterpreter();
 }
 
 OBDPID::OBDPID(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines)
@@ -31,11 +33,14 @@ OBDPID::OBDPID(QString pid, QString name, QString description, QString unit, int
     setNbLines(nbLines);    
     pollTime = new QTime();
     pollTime->start();
+
+    createFormulaInterpreter();
 }
 
 OBDPID::~OBDPID()
 {
     delete pollTime;
+    delete evaluator;
 }
 
 double OBDPID::computeValue(QStringList data)
@@ -44,13 +49,29 @@ double OBDPID::computeValue(QStringList data)
     lines.replace(QString(" "), QString(""));
     if(lines.at(0) == '4' && lines.at(1) == '1')
     {
-        lines = lines.mid(2);
+        lines = lines.mid(4);
+
+        char c;
+        QString tmp;
+        double value = 1;
+
+        for(int i=0, j=0; i<lines.size(); i+=2, j++)
+        {
+            tmp.clear();
+            tmp += lines.at(i);
+            tmp += lines.at(i+1);
+            c = j + 65;
+            value = (double)(tmp.toInt(0,16));
+            evaluator->setVariable(QString(c), value);
+        }
+        return evaluator->evaluate();
     }
     return -1.0;
 }
 
 void OBDPID::createFormulaInterpreter()
 {
+    evaluator = new ArithmeticEvaluator(formula);
 }
 
 QString OBDPID::getPid() const

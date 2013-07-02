@@ -2,6 +2,7 @@
 #define OBDPID_H
 
 #include "obdpiddata.h"
+#include "interpreter/arithmeticevaluator.h"
 #include <QString>
 #include <QStringList>
 #include <QTime>
@@ -53,6 +54,7 @@ private:
     int pollInterval;
     QString formula;
     int nbLines;
+    ArithmeticEvaluator* evaluator;
 };
 
 #endif // OBDPID_H
