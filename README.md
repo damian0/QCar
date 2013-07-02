@@ -9,10 +9,11 @@ Cross-platform car computer software written in Qt/QML &amp; C++
     - OBD II communication (serial ELM327), data polling
     - OBD II PID's configuration in separated XML files
     - XML files validation with XML Schema    
+    - Data interpreter using "formula" field from XML files
 
 <h4>TODO</h4>
   - OBD II part
-    - Data interpreter using "formula" field from XML files
+    - Do some tests and correct bugs if there are (surely there are some ;) ) 
   - GUI
     - ODB dashboard
     - Music / Video player
@@ -20,7 +21,7 @@ Cross-platform car computer software written in Qt/QML &amp; C++
     - Spotify integration
     - Web browser
   - Phone calls processing (not sure)
-  - GPS (not sure)  
+  - GPS Navigation (not sure)  
   - Any good ideas I'll find :)
     
 The current OBD II part has been tested shortly on an Opel Corsa D with an OBDLink SX.
