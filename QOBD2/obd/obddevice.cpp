@@ -1,27 +1,27 @@
-#include "qobddevice.h"
+#include "obddevice.h"
 #include "obdpid.h"
 #include "obdpiddata.h"
 #include "pidloader.h"
 #include <QDebug>
 #include <QThread>
 
-const int QOBDDevice::PAUSE_DELAY_MS = 1000;
+const int ObdDevice::PAUSE_DELAY_MS = 1000;
 
-QOBDDevice::QOBDDevice(QObject *parent) :
+ObdDevice::ObdDevice(QObject *parent) :
     QObject(parent)
 {   
     init();
 }
 
-QOBDDevice::~QOBDDevice()
+ObdDevice::~ObdDevice()
 {
-    foreach(OBDPID* pid, allPIDsHash)
+    foreach(ObdPid* pid, allPIDsHash)
     {
         delete pid;
     }
 }
 
-void QOBDDevice::start()
+void ObdDevice::start()
 {
     if(!isRunning)
     {
@@ -30,7 +30,11 @@ void QOBDDevice::start()
     }
 }
 
-void QOBDDevice::init()
+void ObdDevice::close()
+{
+}
+
+void ObdDevice::init()
 {
     isPaused = false;
     isRunning = false;
@@ -39,20 +43,20 @@ void QOBDDevice::init()
 
     allPIDsHash = PIDLoader::loadPIDs("./pids/");
 
-    qRegisterMetaType<OBDPIDData>("OBDPIDData");
+    qRegisterMetaType<ObdPidData>("OBDPIDData");
 }
 
-void QOBDDevice::stop()
+void ObdDevice::stop()
 {
     isRunning = false;    
 }
 
-void QOBDDevice::pause()
+void ObdDevice::pause()
 {
     isPaused = !isPaused;
 }
 
-void QOBDDevice::addPID(QString PIDName)
+void ObdDevice::addPID(QString PIDName)
 {
     if(allPIDsHash.contains(PIDName))
     {        
@@ -60,14 +64,14 @@ void QOBDDevice::addPID(QString PIDName)
     }
 }
 
-void QOBDDevice::removePID(QString PIDName)
+void ObdDevice::removePID(QString PIDName)
 {
     PIDsToPollHash.remove(PIDName);
 }
 
-void QOBDDevice::setPollInterval(QString PIDName, int interval)
+void ObdDevice::setPollInterval(QString PIDName, int interval)
 {
-    OBDPID* pid = allPIDsHash[PIDName];
+    ObdPid* pid = allPIDsHash[PIDName];
     if(pid)
     {
         if(interval < requestTimeout) interval = requestTimeout;
@@ -75,11 +79,11 @@ void QOBDDevice::setPollInterval(QString PIDName, int interval)
     }
 }
 
-QHash<QString, QString> QOBDDevice::availablePIDs()
+QHash<QString, QString> ObdDevice::availablePIDs()
 {
     QHash<QString, QString> availablePIDsHash;
 
-    foreach(const OBDPID* PID, allPIDsHash)
+    foreach(const ObdPid* PID, allPIDsHash)
     {
         availablePIDsHash[PID->getPid()] = PID->getName();
     }
@@ -87,7 +91,7 @@ QHash<QString, QString> QOBDDevice::availablePIDs()
     return availablePIDsHash;
 }
 
-void QOBDDevice::pollingLoop()
+void ObdDevice::pollingLoop()
 {
     QTime vehicleConnectedTime;
     vehicleConnectedTime.start();
@@ -95,22 +99,22 @@ void QOBDDevice::pollingLoop()
     {        
         if(!isVehicleConnected)
         {
-            qDebug() << "trying to connect ...";
+            emit log(tr("trying to connect ..."));
             isVehicleConnected = searchVehicle();
             QThread::msleep(PAUSE_DELAY_MS);
         }
         else if(isPaused)
         {
-            qDebug() << "paused ...";
+            emit log(tr("paused ..."));
             QThread::msleep(PAUSE_DELAY_MS);
         }
         else
         {            
-            foreach(OBDPID *PID, PIDsToPollHash)
+            foreach(ObdPid *PID, PIDsToPollHash)
             {
                 if(PID->getPollTime()->elapsed() >= PID->getPollInterval())
                 {                    
-                    OBDPIDData data = requestPID(PID);
+                    ObdPidData data = requestPID(PID);
                     emit newData(data);
                     PID->getPollTime()->restart();
                 }
@@ -118,12 +122,13 @@ void QOBDDevice::pollingLoop()
             QThread::msleep(waitingTime());
         }
     }
+    close();
 }
 
-int QOBDDevice::waitingTime()
+int ObdDevice::waitingTime()
 {
     int min = 1000;
-    foreach(OBDPID *PID, PIDsToPollHash)
+    foreach(ObdPid *PID, PIDsToPollHash)
     {
         if(PID->getPollInterval() < min)
             min = PID->getPollInterval();
@@ -131,12 +136,12 @@ int QOBDDevice::waitingTime()
     return min-requestTimeout;
 }
 
-QString QOBDDevice::getName() const
+QString ObdDevice::getName() const
 {
     return name;
 }
 
-void QOBDDevice::setName(const QString &value)
+void ObdDevice::setName(const QString &value)
 {
     name = value;
 }

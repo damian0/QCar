@@ -8,14 +8,14 @@
 class PIDXMLHandler : public QXmlDefaultHandler
 {
 public:
-    PIDXMLHandler(QHash<QString, OBDPID*>* pidsHash);
+    PIDXMLHandler(QHash<QString, ObdPid*>* pidsHash);
 protected:
     bool startElement(const QString &namespaceURI, const QString &localName, const QString &qName, const QXmlAttributes &atts);
     bool endElement(const QString &namespaceURI, const QString &localName, const QString &qName);
     bool characters(const QString &ch);
     bool fatalError(const QXmlParseException &exception);
 
-    QHash<QString, OBDPID*>* pidsHash;
+    QHash<QString, ObdPid*>* pidsHash;
     QString currentData;
     QString currentPid;
     QString currentName;

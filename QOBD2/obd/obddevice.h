@@ -7,12 +7,12 @@
 #include <QList>
 #include <QHash>
 
-class QOBDDevice : public QObject
+class ObdDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit QOBDDevice(QObject *parent = 0);
-    virtual ~QOBDDevice();
+    explicit ObdDevice(QObject *parent = 0);
+    virtual ~ObdDevice();
 
     void stop();
     void pause();
@@ -29,12 +29,13 @@ public:
 
 public slots:
     void start();
+    virtual void close();
 
 protected:
     void init();
     void pollingLoop();
     int waitingTime();
-    virtual OBDPIDData requestPID(OBDPID* PID) = 0;
+    virtual ObdPidData requestPID(ObdPid* PID) = 0;
     virtual bool searchVehicle() = 0;
 
     bool isRunning;
@@ -42,13 +43,14 @@ protected:
     bool isVehicleConnected;
     int requestTimeout;
     QString name;
-    QHash<QString,OBDPID*> allPIDsHash;
-    QHash<QString,OBDPID*> PIDsToPollHash;
+    QHash<QString,ObdPid*> allPIDsHash;
+    QHash<QString,ObdPid*> PIDsToPollHash;
 
     static const int PAUSE_DELAY_MS;
     
 signals:
-    void newData(OBDPIDData PID);
+    void newData(ObdPidData PID);
+    void log(const QString);
     void error(QString);
 };
 

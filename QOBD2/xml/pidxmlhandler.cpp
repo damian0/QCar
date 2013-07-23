@@ -9,7 +9,7 @@ const QString PIDXMLHandler::FORMULA_TAG     = "formula";
 const QString PIDXMLHandler::ID_ATTRIBUTE    = "id";
 const QString PIDXMLHandler::LINES_TAG       = "lines";
 
-PIDXMLHandler::PIDXMLHandler(QHash<QString, OBDPID*>* pidsHash)
+PIDXMLHandler::PIDXMLHandler(QHash<QString, ObdPid*>* pidsHash)
 {
     this->pidsHash = pidsHash;
 }
@@ -52,8 +52,8 @@ bool PIDXMLHandler::endElement(const QString &namespaceURI, const QString &local
         int nbLines = currentNbLines.toInt(&ok);
         if(!ok)
             nbLines = 0;
-        OBDPID *pid = new OBDPID(currentPid, currentName,currentDescription,
-                                 currentUnit, OBDPID::DEFAULT_POLL_INTERVAL,currentFormula, nbLines);
+        ObdPid *pid = new ObdPid(currentPid, currentName,currentDescription,
+                                 currentUnit, ObdPid::DEFAULT_POLL_INTERVAL,currentFormula, nbLines);
         (*pidsHash)[currentPid] = pid;
     }
     return true;

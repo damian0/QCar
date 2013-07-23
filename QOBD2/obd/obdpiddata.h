@@ -3,11 +3,11 @@
 
 #include <QString>
 
-class OBDPIDData
+class ObdPidData
 {
 public:
-    OBDPIDData();
-    OBDPIDData(QString pid, QString name, QString description, double value, QString unit);
+    ObdPidData();
+    ObdPidData(QString pid, QString name, QString description, double value, QString unit);
 
     /* Getters */
     QString getPid() const;

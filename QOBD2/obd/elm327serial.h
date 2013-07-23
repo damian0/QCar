@@ -1,7 +1,7 @@
 #ifndef QELM327SERIAL_H
 #define QELM327SERIAL_H
 
-#include "qobddevice.h"
+#include "obddevice.h"
 #include "obdpid.h"
 #include "obdpiddata.h"
 #include "../tools/serialportsettings.h"
@@ -9,11 +9,11 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
-class QELM327Serial : public QOBDDevice
+class Elm327Serial : public ObdDevice
 {
 public:
-    explicit QELM327Serial(SerialPortSettings settings, QObject *parent = 0);
-    ~QELM327Serial();
+    explicit Elm327Serial(SerialPortSettings settings, QObject *parent = 0);
+    ~Elm327Serial();
     void applySettings();
 
     /* Getters */
@@ -22,8 +22,11 @@ public:
     /* Setters */
     void setSettings(const SerialPortSettings &value);    
 
+public slots:
+    void close();
+
 protected:
-    OBDPIDData requestPID(OBDPID *PID);
+    ObdPidData requestPID(ObdPid *PID);
     bool searchVehicle();
     void init();
 

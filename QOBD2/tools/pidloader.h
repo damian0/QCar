@@ -10,9 +10,9 @@
 class PIDLoader
 {
 public:
-    static QHash<QString, OBDPID *> &loadPIDs(QString directory);
+    static QHash<QString, ObdPid *> &loadPIDs(QString directory);
 private:
-    static void parsePIDFile(QString filename, QHash<QString, OBDPID *> *h);
+    static void parsePIDFile(QString filename, QHash<QString, ObdPid *> *h);
     static bool isPIDFileValid(QString filename);
 };
 

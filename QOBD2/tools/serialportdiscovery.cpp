@@ -1,34 +1,34 @@
 /*!
-  \class QSerialPortDiscovery
-  \brief The QSerialPortDiscovery class lists all serial ports plugged in the system and lists also all OBD devices on the system
+  \class SerialPortDiscovery
+  \brief The SerialPortDiscovery class lists all serial ports plugged in the system and lists also all OBD devices on the system
   */
-#include "qserialportdiscovery.h"
+#include "serialportdiscovery.h"
 
-const int QSerialPortDiscovery::READ_TIMEOUT = 100;
+const int SerialPortDiscovery::READ_TIMEOUT = 100;
 
-QSerialPortDiscovery::QSerialPortDiscovery(QObject *parent) :
+SerialPortDiscovery::SerialPortDiscovery(QObject *parent) :
     QObject(parent)
 {
 }
 
 /*!
- * \fn QList<QSerialPortInfo> *QSerialPortDiscovery::getSerialPortList()
+ * \fn QList<QSerialPortInfo> *SerialPortDiscovery::getSerialPortList()
  *
  * \brief Lists all serial ports on the system, don't forget to delete the QList as soon as you don't use anymore!
  * Returns A QList<QSerialPortInfo>* containing all serial ports
  */
-QList<QSerialPortInfo> *QSerialPortDiscovery::getSerialPortList()
+QList<QSerialPortInfo> *SerialPortDiscovery::getSerialPortList()
 {
     return new QList<QSerialPortInfo>(QSerialPortInfo::availablePorts());
 }
 
 /*!
- * \fn QList<QSerialPortInfo> *QSerialPortDiscovery::getOBDSerialPortList(SerialPortSettings settings)
+ * \fn QList<QSerialPortInfo> *SerialPortDiscovery::getOBDSerialPortList(SerialPortSettings settings)
  *
  * \brief Lists all serial ports that are OBD devices, testing them with \a settings as rs232 settings. Don't forget to delete the QList as soon as you don't use anymore!
  * Returns A QList<QSerialPortInfo>* containing all OBD devices
  */
-QList<QSerialPortInfo> *QSerialPortDiscovery::getOBDSerialPortList(SerialPortSettings settings)
+QList<QSerialPortInfo> *SerialPortDiscovery::getOBDSerialPortList(SerialPortSettings settings)
 {        
     QList<QSerialPortInfo>* allSerialPortList = getSerialPortList();
     QList<QSerialPortInfo>* obdSerialPortList = new QList<QSerialPortInfo>();
@@ -49,7 +49,7 @@ QList<QSerialPortInfo> *QSerialPortDiscovery::getOBDSerialPortList(SerialPortSet
 }
 
 /*!
- * \fn bool QSerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
+ * \fn bool SerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
  *
  * \brief Tests if \a serialPort is an OBD device
  *
@@ -57,7 +57,7 @@ QList<QSerialPortInfo> *QSerialPortDiscovery::getOBDSerialPortList(SerialPortSet
  *
  * Returns A QList<QSerialPortInfo>* containing all OBD devices
  */
-bool QSerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
+bool SerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
 {
     QString response = "";
     QByteArray request = "ATSP0\r";
@@ -74,11 +74,11 @@ bool QSerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
 }
 
 /*!
- * \fn void QSerialPortDiscovery::openPort(QSerialPort *serialPort, SerialPortSettings *settings)
+ * \fn void SerialPortDiscovery::openPort(QSerialPort *serialPort, SerialPortSettings *settings)
  *
  * \brief Try to configure \a serialPort with \a settings
  */
-void QSerialPortDiscovery::openPort(QSerialPort *serialPort, SerialPortSettings *settings)
+void SerialPortDiscovery::openPort(QSerialPort *serialPort, SerialPortSettings *settings)
 {
     if (!serialPort->open(QIODevice::ReadWrite))
     {

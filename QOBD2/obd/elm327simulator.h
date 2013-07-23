@@ -1,12 +1,12 @@
 #ifndef QELM327SIMULATOR_H
 #define QELM327SIMULATOR_H
 
-#include "qobddevice.h"
+#include "obddevice.h"
 
-class QELM327Simulator : public QOBDDevice
+class Elm327Simulator : public ObdDevice
 {
 public:
-    QELM327Simulator();
+    Elm327Simulator();
 };
 
 #endif // QELM327SIMULATOR_H

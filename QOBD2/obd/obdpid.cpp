@@ -1,14 +1,14 @@
 #include "obdpid.h"
 #include <QDebug>
 
-const QString OBDPID::DEFAULT_PID         = "0100";
-const QString OBDPID::DEFAULT_NAME        = "No name";
-const QString OBDPID::DEFAULT_DESCRIPTION = "No description";
-const int OBDPID::DEFAULT_POLL_INTERVAL   = 100;
-const QString OBDPID::DEFAULT_FORMULA     = "";
-const int OBDPID::DEFAULT_NB_LINES        = 0;
+const QString ObdPid::DEFAULT_PID         = "0100";
+const QString ObdPid::DEFAULT_NAME        = "No name";
+const QString ObdPid::DEFAULT_DESCRIPTION = "No description";
+const int ObdPid::DEFAULT_POLL_INTERVAL   = 100;
+const QString ObdPid::DEFAULT_FORMULA     = "";
+const int ObdPid::DEFAULT_NB_LINES        = 0;
 
-OBDPID::OBDPID()
+ObdPid::ObdPid()
 {
     setPid(DEFAULT_PID);
     setName(DEFAULT_NAME);
@@ -22,7 +22,7 @@ OBDPID::OBDPID()
     createFormulaInterpreter();
 }
 
-OBDPID::OBDPID(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines)
+ObdPid::ObdPid(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines)
 {
     setPid(pid);
     setName(name);
@@ -37,13 +37,13 @@ OBDPID::OBDPID(QString pid, QString name, QString description, QString unit, int
     createFormulaInterpreter();
 }
 
-OBDPID::~OBDPID()
+ObdPid::~ObdPid()
 {
     delete pollTime;
     delete evaluator;
 }
 
-double OBDPID::computeValue(QStringList data)
+double ObdPid::computeValue(QStringList data)
 {
     QString lines = data.join("");
     lines.replace(QString(" "), QString(""));
@@ -69,87 +69,87 @@ double OBDPID::computeValue(QStringList data)
     return -1.0;
 }
 
-void OBDPID::createFormulaInterpreter()
+void ObdPid::createFormulaInterpreter()
 {
     evaluator = new ArithmeticEvaluator(formula);
 }
 
-QString OBDPID::getPid() const
+QString ObdPid::getPid() const
 {
     return pid;
 }
 
-void OBDPID::setPid(const QString &value)
+void ObdPid::setPid(const QString &value)
 {
     pid = value;
 }
 
-QString OBDPID::getDescription() const
+QString ObdPid::getDescription() const
 {
     return description;
 }
 
-void OBDPID::setDescription(const QString &value)
+void ObdPid::setDescription(const QString &value)
 {
     description = value;
 }
 
-QTime *OBDPID::getPollTime() const
+QTime *ObdPid::getPollTime() const
 {
     return pollTime;
 }
 
-void OBDPID::setPollTime(QTime *value)
+void ObdPid::setPollTime(QTime *value)
 {
     pollTime = value;
 }
 
-int OBDPID::getPollInterval() const
+int ObdPid::getPollInterval() const
 {
     return pollInterval;
 }
 
-void OBDPID::setPollInterval(int value)
+void ObdPid::setPollInterval(int value)
 {
     pollInterval = value;
 }
 
-QString OBDPID::getFormula() const
+QString ObdPid::getFormula() const
 {
     return formula;
 }
 
-void OBDPID::setFormula(const QString &value)
+void ObdPid::setFormula(const QString &value)
 {
     formula = value;
 }
 
-QString OBDPID::getUnit() const
+QString ObdPid::getUnit() const
 {
     return unit;
 }
 
-void OBDPID::setUnit(const QString &value)
+void ObdPid::setUnit(const QString &value)
 {
     unit = value;
 }
 
-int OBDPID::getNbLines() const
+int ObdPid::getNbLines() const
 {
     return nbLines;
 }
 
-void OBDPID::setNbLines(int value)
+void ObdPid::setNbLines(int value)
 {
     nbLines = value;
 }
 
-QString OBDPID::getName() const
+QString ObdPid::getName() const
 {
     return name;
 }
 
-void OBDPID::setName(const QString &value)
+void ObdPid::setName(const QString &value)
 {
     name = value;
 }

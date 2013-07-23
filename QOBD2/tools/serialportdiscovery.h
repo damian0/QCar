@@ -6,11 +6,11 @@
 #include <QtSerialPort/QSerialPortInfo>
 #include <QObject>
 
-class QSerialPortDiscovery : public QObject
+class SerialPortDiscovery : public QObject
 {
     Q_OBJECT
 public:    
-    explicit QSerialPortDiscovery(QObject *parent = 0);
+    explicit SerialPortDiscovery(QObject *parent = 0);
 
     QList<QSerialPortInfo> *getSerialPortList();
     QList<QSerialPortInfo> *getOBDSerialPortList(SerialPortSettings settings);

@@ -1,12 +1,12 @@
 #include "obdpiddata.h"
 
-const QString OBDPIDData::DEFAULT_PID         = "0100";
-const QString OBDPIDData::DEFAULT_NAME        = "No name";
-const QString OBDPIDData::DEFAULT_DESCRIPTION = "No description";
-const double OBDPIDData::DEFAULT_VALUE        = 0.0;
-const QString OBDPIDData::DEFAULT_UNIT        = "No unit";
+const QString ObdPidData::DEFAULT_PID         = "0100";
+const QString ObdPidData::DEFAULT_NAME        = "No name";
+const QString ObdPidData::DEFAULT_DESCRIPTION = "No description";
+const double ObdPidData::DEFAULT_VALUE        = 0.0;
+const QString ObdPidData::DEFAULT_UNIT        = "No unit";
 
-OBDPIDData::OBDPIDData()
+ObdPidData::ObdPidData()
 {
     setPID(DEFAULT_PID);
     setName(DEFAULT_NAME);
@@ -15,7 +15,7 @@ OBDPIDData::OBDPIDData()
     setUnit(DEFAULT_UNIT);
 }
 
-OBDPIDData::OBDPIDData(QString pid, QString name, QString description, double value, QString unit)
+ObdPidData::ObdPidData(QString pid, QString name, QString description, double value, QString unit)
 {  
     setPID(pid);
     setName(name);
@@ -24,52 +24,52 @@ OBDPIDData::OBDPIDData(QString pid, QString name, QString description, double va
     setUnit(unit);
 }
 
-QString OBDPIDData::getPid() const
+QString ObdPidData::getPid() const
 {
     return pid;
 }
 
-void OBDPIDData::setPID(const QString &value)
+void ObdPidData::setPID(const QString &value)
 {
     this->pid = value;
 }
 
-QString OBDPIDData::getDescription() const
+QString ObdPidData::getDescription() const
 {
     return description;
 }
 
-void OBDPIDData::setDescription(const QString &value)
+void ObdPidData::setDescription(const QString &value)
 {
     this->description = value;
 }
 
-double OBDPIDData::getValue() const
+double ObdPidData::getValue() const
 {
     return value;
 }
 
-void OBDPIDData::setValue(double value)
+void ObdPidData::setValue(double value)
 {
     this->value = value;
 }
 
-QString OBDPIDData::getUnit() const
+QString ObdPidData::getUnit() const
 {
     return unit;
 }
 
-void OBDPIDData::setUnit(const QString &value)
+void ObdPidData::setUnit(const QString &value)
 {
     this->unit = value;
 }
 
-QString OBDPIDData::getName() const
+QString ObdPidData::getName() const
 {
     return name;
 }
 
-void OBDPIDData::setName(const QString &value)
+void ObdPidData::setName(const QString &value)
 {
     this->name = value;
 }

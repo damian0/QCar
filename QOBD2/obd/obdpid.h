@@ -7,12 +7,12 @@
 #include <QStringList>
 #include <QTime>
 
-class OBDPID
+class ObdPid
 {
 public:
-    OBDPID();
-    OBDPID(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines = 0);
-    virtual ~OBDPID();
+    ObdPid();
+    ObdPid(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines = 0);
+    virtual ~ObdPid();
 
     double computeValue(QStringList data);
 

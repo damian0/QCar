@@ -4,9 +4,9 @@
 #include <QDir>
 #include <QtXml/QXmlSimpleReader>
 
-QHash<QString, OBDPID *> &PIDLoader::loadPIDs(QString directory)
+QHash<QString, ObdPid *> &PIDLoader::loadPIDs(QString directory)
 {
-    QHash<QString, OBDPID*>* h = new QHash<QString, OBDPID*>();   
+    QHash<QString, ObdPid*>* h = new QHash<QString, ObdPid*>();   
     QDir xmlDirectory(directory);
     foreach(const QFileInfo &fileInfo, xmlDirectory.entryInfoList())
     {
@@ -21,7 +21,7 @@ QHash<QString, OBDPID *> &PIDLoader::loadPIDs(QString directory)
     return *h;
 }
 
-void PIDLoader::parsePIDFile(QString filename, QHash<QString, OBDPID*>* h)
+void PIDLoader::parsePIDFile(QString filename, QHash<QString, ObdPid*>* h)
 {
     QXmlSimpleReader xmlReader;
     QFile file(filename);

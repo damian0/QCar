@@ -2,7 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QHash>
+#include <QThread>
 #include "obd/obdpiddata.h"
+#include "obd/elm327serial.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,9 +20,20 @@ public:
     ~MainWindow();
 
 public slots:
-    void handlePIDData(OBDPIDData data);
+    void handlePIDData(ObdPidData data);
+    void updateSerialPortList();
+    void btnStartPressed();
+    void btnPausePressed();
+    void btnStopPressed();
+    void test(const QString txt);
     
 private:
+    void init();    
+    void switchStartStopState();
+
+    QThread *obdThread;
+    QHash<QString, QSerialPortInfo> portInfoHash;
+    ObdDevice *currentDevice;
     Ui::MainWindow *ui;
 };
 
