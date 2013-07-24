@@ -1,27 +1,6 @@
 #include "obdpid.h"
 #include <QDebug>
 
-const QString ObdPid::DEFAULT_PID         = "0100";
-const QString ObdPid::DEFAULT_NAME        = "No name";
-const QString ObdPid::DEFAULT_DESCRIPTION = "No description";
-const int ObdPid::DEFAULT_POLL_INTERVAL   = 100;
-const QString ObdPid::DEFAULT_FORMULA     = "";
-const int ObdPid::DEFAULT_NB_LINES        = 0;
-
-ObdPid::ObdPid()
-{
-    setPid(DEFAULT_PID);
-    setName(DEFAULT_NAME);
-    setDescription(DEFAULT_DESCRIPTION);
-    setPollInterval(DEFAULT_POLL_INTERVAL);
-    setFormula(DEFAULT_FORMULA);
-    setNbLines(DEFAULT_NB_LINES);
-    pollTime = new QTime();
-    pollTime->start();
-
-    createFormulaInterpreter();
-}
-
 ObdPid::ObdPid(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines)
 {
     setPid(pid);
@@ -58,9 +37,9 @@ double ObdPid::computeValue(QStringList data)
         for(int i=0, j=0; i<lines.size(); i+=2, j++)
         {
             tmp.clear();
-            tmp += lines.at(i);
-            tmp += lines.at(i+1);
-            c = j + 65;
+            tmp += lines.at(i);     //half byte (MSB)
+            tmp += lines.at(i+1);   //half byte (LSB)
+            c = j + 65;             //ASCII variable name, starts at 'A'
             value = (double)(tmp.toInt(0,16));
             evaluator->setVariable(QString(c), value);
         }

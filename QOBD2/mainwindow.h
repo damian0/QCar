@@ -18,8 +18,11 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
 public slots:
+    void err(QString data);
+
+    /*
+public slots:    
     void handlePIDData(ObdPidData data);
     void updateSerialPortList();
     void btnStartPressed();
@@ -34,6 +37,8 @@ private:
     QThread *obdThread;
     QHash<QString, QSerialPortInfo> portInfoHash;
     ObdDevice *currentDevice;
+    */
+private:
     Ui::MainWindow *ui;
 };
 

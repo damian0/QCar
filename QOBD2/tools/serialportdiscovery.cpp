@@ -37,10 +37,11 @@ QList<QSerialPortInfo> *SerialPortDiscovery::getOBDSerialPortList(SerialPortSett
     foreach(const QSerialPortInfo &info, *allSerialPortList)
     {
         serialPort.setPort(info);
-        openPort(&serialPort, &settings);
-
-        if(isOBDDevice(&serialPort))
-            obdSerialPortList->append(info);
+        if(openPort(&serialPort, &settings))
+        {
+            if(isOBDDevice(&serialPort))
+                obdSerialPortList->append(info);
+        }
     }
 
     delete allSerialPortList;
@@ -78,37 +79,39 @@ bool SerialPortDiscovery::isOBDDevice(QSerialPort *serialPort)
  *
  * \brief Try to configure \a serialPort with \a settings
  */
-void SerialPortDiscovery::openPort(QSerialPort *serialPort, SerialPortSettings *settings)
+bool SerialPortDiscovery::openPort(QSerialPort *serialPort, SerialPortSettings *settings)
 {
     if (!serialPort->open(QIODevice::ReadWrite))
     {
         emit error(QString(tr("failed to open port %1")).arg(serialPort->portName()));
-        return;
+        return false;
     }
     if(!serialPort->setDataBits(settings->getDataBits()))
     {
         emit error(QString(tr("failed to set data bits on port %1")).arg(serialPort->portName()));
-        return;
+        return false;
     }
     if(!serialPort->setStopBits(settings->getStopBits()))
     {
         emit error(QString(tr("failed to set stop bits on port %1")).arg(serialPort->portName()));
-        return;
+        return false;
     }
     if(!serialPort->setParity(settings->getParityBits()))
     {
         emit error(QString(tr("failed to set parity bits on port %1")).arg(serialPort->portName()));
-        return;
+        return false;
     }
     if(!serialPort->setFlowControl(settings->getFlowControl()))
     {
         emit error(QString(tr("failed to set flow control on port %1")).arg(serialPort->portName()));
-        return;
+        return false;
     }
     if(!serialPort->setBaudRate(settings->getBaudRate()))
     {
         emit error(QString(tr("failed to set baud rate port %1")).arg(serialPort->portName()));
-        return;
+        return false;
     }
     serialPort->clear();
+
+    return true;
 }

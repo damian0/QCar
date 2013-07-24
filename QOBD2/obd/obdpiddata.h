@@ -5,9 +5,12 @@
 
 class ObdPidData
 {
-public:
-    ObdPidData();
-    ObdPidData(QString pid, QString name, QString description, double value, QString unit);
+public:    
+    ObdPidData(QString pid = QString("0100"),
+               QString name = QString("No name"),
+               QString description = QString("No description"),
+               double value = 0.0,
+               QString unit = QString("No unit"));
 
     /* Getters */
     QString getPid() const;
@@ -30,12 +33,6 @@ private:
     QString description;
     double value;
     QString unit;
-
-    static const QString DEFAULT_PID;
-    static const QString DEFAULT_NAME;
-    static const QString DEFAULT_DESCRIPTION;
-    static const double DEFAULT_VALUE;
-    static const QString DEFAULT_UNIT;
 };
 
 #endif // OBDPIDDATA_H

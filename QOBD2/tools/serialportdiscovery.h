@@ -16,7 +16,7 @@ public:
     QList<QSerialPortInfo> *getOBDSerialPortList(SerialPortSettings settings);
 private:
     bool isOBDDevice(QSerialPort *serialPort);
-    void openPort(QSerialPort *serialPort, SerialPortSettings *settings);
+    bool openPort(QSerialPort *serialPort, SerialPortSettings *settings);
 
     static const int READ_TIMEOUT;
 

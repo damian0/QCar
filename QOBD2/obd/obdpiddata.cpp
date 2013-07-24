@@ -1,20 +1,5 @@
 #include "obdpiddata.h"
 
-const QString ObdPidData::DEFAULT_PID         = "0100";
-const QString ObdPidData::DEFAULT_NAME        = "No name";
-const QString ObdPidData::DEFAULT_DESCRIPTION = "No description";
-const double ObdPidData::DEFAULT_VALUE        = 0.0;
-const QString ObdPidData::DEFAULT_UNIT        = "No unit";
-
-ObdPidData::ObdPidData()
-{
-    setPID(DEFAULT_PID);
-    setName(DEFAULT_NAME);
-    setDescription(DEFAULT_DESCRIPTION);
-    setValue(DEFAULT_VALUE);
-    setUnit(DEFAULT_UNIT);
-}
-
 ObdPidData::ObdPidData(QString pid, QString name, QString description, double value, QString unit)
 {  
     setPID(pid);

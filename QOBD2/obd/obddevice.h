@@ -3,6 +3,8 @@
 
 #include "obdpid.h"
 #include "obdpiddata.h"
+#include "abstractobdhardware.h"
+#include "obdresponsehandler.h"
 #include <QObject>
 #include <QList>
 #include <QHash>
@@ -11,11 +13,14 @@ class ObdDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit ObdDevice(QObject *parent = 0);
+    explicit ObdDevice(AbstractObdHardware *obdHardware, QObject *parent = 0);
     virtual ~ObdDevice();
 
+    bool connectHardware();
+    void disconnectHardware();
+    void start();
     void stop();
-    void pause();
+    void pause();    
     void addPID(QString PIDName);
     void removePID(QString PIDName);
     void setPollInterval(QString PIDName, int interval);
@@ -24,25 +29,23 @@ public:
     /* Getters */
     QString getName() const;
 
-    /* Setters */
-    void setName(const QString &value);
-
 public slots:
-    void start();
-    virtual void close();
+    void logHardware(QString message);
+    void errorHardware(QString err);
 
-protected:
+private:
     void init();
     void pollingLoop();
     int waitingTime();
-    virtual ObdPidData requestPID(ObdPid* PID) = 0;
-    virtual bool searchVehicle() = 0;
+    bool searchVehicle();
+    ObdPidData requestPid(ObdPid* pid);
 
     bool isRunning;
     bool isPaused;
     bool isVehicleConnected;
     int requestTimeout;
-    QString name;
+    ObdResponseHandler responseHandler;
+    AbstractObdHardware *obdHardware;
     QHash<QString,ObdPid*> allPIDsHash;
     QHash<QString,ObdPid*> PIDsToPollHash;
 

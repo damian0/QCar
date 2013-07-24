@@ -12,10 +12,12 @@
 class SerialPortSettings
 {
 public:
-    SerialPortSettings();
-    SerialPortSettings(QSerialPortInfo serialPortInfo);
-    SerialPortSettings(QSerialPortInfo serialPortInfo, QSerialPort::DataBits dataBits, QSerialPort::StopBits stopBits,
-                       QSerialPort::Parity parityBits, QSerialPort::BaudRate baudRate, QSerialPort::FlowControl flowControl);
+    SerialPortSettings(QSerialPortInfo serialPortInfo = QSerialPortInfo(),
+                       QSerialPort::DataBits dataBits = QSerialPort::Data8,
+                       QSerialPort::StopBits stopBits = QSerialPort::OneStop,
+                       QSerialPort::Parity parityBits = QSerialPort::NoParity,
+                       QSerialPort::BaudRate baudRate = QSerialPort::Baud115200,
+                       QSerialPort::FlowControl flowControl = QSerialPort::NoFlowControl);
 
     /* Getters */
     QSerialPortInfo getSerialPortInfo() const;    
@@ -27,7 +29,7 @@ public:
 
 
     /* Setters */
-    void setSerialPortInfo(const QSerialPortInfo &value);    
+    void setSerialPortInfo(const QSerialPortInfo &value);
     void setDataBits(const QSerialPort::DataBits &value);
     void setStopBits(const QSerialPort::StopBits &value);
     void setParityBits(const QSerialPort::Parity &value);
@@ -40,13 +42,7 @@ private:
     QSerialPort::StopBits stopBits;
     QSerialPort::Parity parityBits;
     QSerialPort::BaudRate baudRate;
-    QSerialPort::FlowControl flowControl;
-
-    static const QSerialPort::DataBits DEFAULT_DATA_BITS;
-    static const QSerialPort::StopBits DEFAULT_STOP_BITS;
-    static const QSerialPort::Parity DEFAULT_PARITY_BITS;
-    static const QSerialPort::BaudRate DEFAULT_BAUD_RATE;
-    static const QSerialPort::FlowControl DEFAULT_FLOWCONTROL;
+    QSerialPort::FlowControl flowControl;   
 };
 
 #endif // SERIALPORTSETTINGS_H

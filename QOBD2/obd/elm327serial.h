@@ -1,43 +1,39 @@
-#ifndef QELM327SERIAL_H
-#define QELM327SERIAL_H
+#ifndef ELM327SERIAL_H
+#define ELM327SERIAL_H
 
-#include "obddevice.h"
-#include "obdpid.h"
-#include "obdpiddata.h"
+#include "abstractobdhardware.h"
+#include "obdresponsehandler.h"
 #include "../tools/serialportsettings.h"
 #include <QStringList>
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
-class Elm327Serial : public ObdDevice
+class Elm327Serial : public AbstractObdHardware
 {
+    Q_OBJECT
 public:
     explicit Elm327Serial(SerialPortSettings settings, QObject *parent = 0);
     ~Elm327Serial();
-    void applySettings();
+
+    bool connect();
+    void disconnect();
+    QStringList send(QString data);
 
     /* Getters */
     SerialPortSettings getSettings() const;
+    int getTimeout() const;
 
     /* Setters */
-    void setSettings(const SerialPortSettings &value);    
+    void setSettings(const SerialPortSettings &value);      
+    void setTimeout(int value);
 
-public slots:
-    void close();
+private:    
+    bool applySettings();
 
-protected:
-    ObdPidData requestPID(ObdPid *PID);
-    bool searchVehicle();
-    void init();
-
-private:
-    QStringList writeData(QString data, int timeout);
-    QStringList parseData(QString data);
-
+    int timeout;
+    ObdResponseHandler responseHandler;
+    SerialPortSettings settings;    
     QSerialPort *serialPort;
-    SerialPortSettings settings;
-
-    static const int READ_TIMEOUT;    
 };
 
-#endif // QELM327SERIAL_H
+#endif // ELM327SERIAL_H

@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "tools/serialportdiscovery.h"
-#include "obd/elm327serial.h"
-#include "obd/interpreter/arithmeticevaluator.h"
+#include "obd/obdhardwarefactory.h"
+#include "obd/obddevice.h"
 
 #include <QDebug>
 
@@ -11,7 +11,31 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    init();
+
+    // Serial port discovery
+    SerialPortDiscovery spd;
+    SerialPortSettings settings;
+    QList<QSerialPortInfo>* ports = spd.getOBDSerialPortList(settings);
+    QSerialPortInfo info = ports->first();
+    delete ports;
+
+    settings.setSerialPortInfo(info);
+
+    //OBD part setup
+    AbstractObdHardware* elm327 = ObdHardwareFactory::createElm327Serial(settings);
+    ObdDevice obd(elm327);
+    connect(&obd, &ObdDevice::error, this, &MainWindow::err);
+    connect(&obd, &ObdDevice::log, this, &MainWindow::err);
+
+    obd.connectHardware();
+
+    // Adding some PID's to the polling loop
+    obd.addPID("010C");  //Engine RPM
+    obd.addPID("010D");  //Vehicle speed
+
+    //obd.start();
+
+    //init();
 
     /*
      *Usage example
@@ -48,17 +72,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    btnStopPressed();
-    delete currentDevice;
-    delete obdThread;
+    //btnStopPressed();
+    //delete currentDevice;
+    //delete obdThread;
     delete ui;
 }
 
+void MainWindow::err(QString data)
+{
+    qDebug() << data;
+}
+/*
 void MainWindow::init()
 {
     updateSerialPortList();
-    currentDevice = 0;    
-    obdThread = new QThread(this);    
+    currentDevice = 0;
+    obdThread = new QThread(this);
 }
 
 void MainWindow::updateSerialPortList()
@@ -82,19 +111,19 @@ void MainWindow::updateSerialPortList()
 }
 
 void MainWindow::handlePIDData(ObdPidData data)
-{    
+{
     qDebug() << data.getName() << "(" << data.getPid() << "):" << data.getValue() << data.getUnit();
 }
 
 void MainWindow::btnStartPressed()
-{    
-    if(currentDevice)    
+{
+    if(currentDevice)
         this->btnStopPressed();
 
     QString portLocation = ui->cbOBDDevices->currentText();
 
     if(portInfoHash.contains(portLocation))
-    {        
+    {
         SerialPortSettings settings(portInfoHash[portLocation]);
         currentDevice = new Elm327Serial(settings);
         currentDevice->moveToThread(obdThread);
@@ -121,7 +150,7 @@ void MainWindow::btnStopPressed()
 {
     if(currentDevice)
     {
-        currentDevice->stop();        
+        currentDevice->stop();
         currentDevice->deleteLater();
         currentDevice = 0;
 
@@ -144,3 +173,4 @@ void MainWindow::switchStartStopState()
     ui->btnPause->setEnabled(!ui->btnPause->isEnabled());
     ui->cbOBDDevices->setEnabled(!ui->cbOBDDevices->isEnabled());
 }
+*/

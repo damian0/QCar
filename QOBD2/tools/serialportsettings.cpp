@@ -1,32 +1,11 @@
 #include "serialportsettings.h"
 
-const QSerialPort::DataBits SerialPortSettings::DEFAULT_DATA_BITS   = QSerialPort::Data8;
-const QSerialPort::StopBits SerialPortSettings::DEFAULT_STOP_BITS   = QSerialPort::OneStop;
-const QSerialPort::Parity SerialPortSettings::DEFAULT_PARITY_BITS = QSerialPort::NoParity;
-const QSerialPort::BaudRate SerialPortSettings::DEFAULT_BAUD_RATE   = QSerialPort::Baud115200;
-const QSerialPort::FlowControl SerialPortSettings::DEFAULT_FLOWCONTROL = QSerialPort::NoFlowControl;
-
-SerialPortSettings::SerialPortSettings()
-{
-    setDataBits(DEFAULT_DATA_BITS);
-    setStopBits(DEFAULT_STOP_BITS);
-    setParityBits(DEFAULT_PARITY_BITS);
-    setBaudRate(DEFAULT_BAUD_RATE);
-    setFlowControl(DEFAULT_FLOWCONTROL);
-}
-
-SerialPortSettings::SerialPortSettings(QSerialPortInfo serialPortInfo)
-{
-    setSerialPortInfo(serialPortInfo);
-    setDataBits(DEFAULT_DATA_BITS);
-    setStopBits(DEFAULT_STOP_BITS);
-    setParityBits(DEFAULT_PARITY_BITS);
-    setBaudRate(DEFAULT_BAUD_RATE);
-    setFlowControl(DEFAULT_FLOWCONTROL);
-}
-
-SerialPortSettings::SerialPortSettings(QSerialPortInfo serialPortInfo, QSerialPort::DataBits dataBits, QSerialPort::StopBits stopBits,
-                                       QSerialPort::Parity parityBits, QSerialPort::BaudRate baudRate, QSerialPort::FlowControl flowControl)
+SerialPortSettings::SerialPortSettings(QSerialPortInfo serialPortInfo,
+                                       QSerialPort::DataBits dataBits,
+                                       QSerialPort::StopBits stopBits,
+                                       QSerialPort::Parity parityBits,
+                                       QSerialPort::BaudRate baudRate,
+                                       QSerialPort::FlowControl flowControl)
 {
     setSerialPortInfo(serialPortInfo);
     setDataBits(dataBits);
@@ -42,7 +21,7 @@ QSerialPortInfo SerialPortSettings::getSerialPortInfo() const
 }
 
 void SerialPortSettings::setSerialPortInfo(const QSerialPortInfo &value)
-{
+{        
     serialPortInfo = value;
 }
 

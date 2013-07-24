@@ -7,9 +7,10 @@
 
 const int ObdDevice::PAUSE_DELAY_MS = 1000;
 
-ObdDevice::ObdDevice(QObject *parent) :
+ObdDevice::ObdDevice(AbstractObdHardware *obdHardware, QObject *parent) :
     QObject(parent)
 {   
+    this->obdHardware = obdHardware;
     init();
 }
 
@@ -19,6 +20,18 @@ ObdDevice::~ObdDevice()
     {
         delete pid;
     }
+    disconnectHardware();
+    delete obdHardware;
+}
+
+bool ObdDevice::connectHardware()
+{
+    return obdHardware->connect();
+}
+
+void ObdDevice::disconnectHardware()
+{
+    obdHardware->disconnect();
 }
 
 void ObdDevice::start()
@@ -30,20 +43,18 @@ void ObdDevice::start()
     }
 }
 
-void ObdDevice::close()
-{
-}
-
 void ObdDevice::init()
-{
+{   
+    connect(obdHardware, &AbstractObdHardware::log, this, &ObdDevice::logHardware);
+    connect(obdHardware, &AbstractObdHardware::error, this, &ObdDevice::errorHardware);
+
     isPaused = false;
     isRunning = false;
-    isVehicleConnected = false;
-    name = "";
+    isVehicleConnected = false;    
 
-    allPIDsHash = PIDLoader::loadPIDs("./pids/");
+    allPIDsHash = PIDLoader::loadPIDs("./pids/");    
 
-    qRegisterMetaType<ObdPidData>("OBDPIDData");
+    qRegisterMetaType<ObdPidData>("ObdPidData");
 }
 
 void ObdDevice::stop()
@@ -83,9 +94,9 @@ QHash<QString, QString> ObdDevice::availablePIDs()
 {
     QHash<QString, QString> availablePIDsHash;
 
-    foreach(const ObdPid* PID, allPIDsHash)
+    foreach(const ObdPid* pid, allPIDsHash)
     {
-        availablePIDsHash[PID->getPid()] = PID->getName();
+        availablePIDsHash[pid->getPid()] = pid->getName();
     }
 
     return availablePIDsHash;
@@ -99,30 +110,30 @@ void ObdDevice::pollingLoop()
     {        
         if(!isVehicleConnected)
         {
-            emit log(tr("trying to connect ..."));
+            emit log(tr("%1 : searching vehicle ...").arg(obdHardware->getDeviceName()));
             isVehicleConnected = searchVehicle();
             QThread::msleep(PAUSE_DELAY_MS);
         }
         else if(isPaused)
         {
-            emit log(tr("paused ..."));
+            emit log(tr("%1 : paused ...").arg(obdHardware->getDeviceName()));
             QThread::msleep(PAUSE_DELAY_MS);
         }
         else
         {            
-            foreach(ObdPid *PID, PIDsToPollHash)
+            foreach(ObdPid *pid, PIDsToPollHash)
             {
-                if(PID->getPollTime()->elapsed() >= PID->getPollInterval())
+                if(pid->getPollTime()->elapsed() >= pid->getPollInterval())
                 {                    
-                    ObdPidData data = requestPID(PID);
+                    ObdPidData data = requestPid(pid);
                     emit newData(data);
-                    PID->getPollTime()->restart();
+                    pid->getPollTime()->restart();
                 }
             }
             QThread::msleep(waitingTime());
         }
     }
-    close();
+    disconnectHardware();
 }
 
 int ObdDevice::waitingTime()
@@ -136,12 +147,39 @@ int ObdDevice::waitingTime()
     return min-requestTimeout;
 }
 
-QString ObdDevice::getName() const
+ObdPidData ObdDevice::requestPid(ObdPid *pid)
 {
-    return name;
+    QString request = pid->getPid() + "\r";
+    QStringList response = obdHardware->send(request);
+
+    return ObdPidData(pid->getPid(), pid->getName(), pid->getDescription(), pid->computeValue(response), pid->getUnit());
 }
 
-void ObdDevice::setName(const QString &value)
+bool ObdDevice::searchVehicle()
 {
-    name = value;
+    QString request = "010C1\r";
+    QStringList response = obdHardware->send(request);
+
+    if(response.size() < 1)
+        return false;
+    else
+        return response.first().contains("OK");
+}
+
+QString ObdDevice::getName() const
+{
+    if(obdHardware)
+        return obdHardware->getDeviceName();
+    else
+        return QString();
+}
+
+void ObdDevice::logHardware(QString message)
+{
+    emit log(message);
+}
+
+void ObdDevice::errorHardware(QString err)
+{
+    emit error(err);
 }

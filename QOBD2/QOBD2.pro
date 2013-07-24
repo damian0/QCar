@@ -27,7 +27,10 @@ HEADERS += mainwindow.h \
     obd/elm327serial.h \
     obd/elm327simulator.h \
     obd/obddevice.h \
-    tools/serialportdiscovery.h
+    tools/serialportdiscovery.h \
+    obd/abstractobdhardware.h \
+    obd/obdresponsehandler.h \
+    obd/obdhardwarefactory.h
 FORMS += mainwindow.ui
 SOURCES += main.cpp \
            mainwindow.cpp \
@@ -43,4 +46,7 @@ SOURCES += main.cpp \
     obd/elm327serial.cpp \
     obd/elm327simulator.cpp \
     obd/obddevice.cpp \
-    tools/serialportdiscovery.cpp
+    tools/serialportdiscovery.cpp \
+    obd/abstractobdhardware.cpp \
+    obd/obdresponsehandler.cpp \
+    obd/obdhardwarefactory.cpp

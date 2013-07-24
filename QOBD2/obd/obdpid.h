@@ -11,7 +11,13 @@ class ObdPid
 {
 public:
     ObdPid();
-    ObdPid(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines = 0);
+    ObdPid(QString pid = QString("0100"),
+           QString name = QString("No name"),
+           QString description = QString("No description"),
+           QString unit = QString("No unit"),
+           int pollInterval = 100,
+           QString formula = QString(),
+           int nbLines = 0);
     virtual ~ObdPid();
 
     double computeValue(QStringList data);
@@ -34,14 +40,7 @@ public:
     void setPollTime(QTime *value);
     void setPollInterval(int value);
     void setFormula(const QString &value);
-    void setNbLines(int value);
-
-    static const QString DEFAULT_PID;
-    static const QString DEFAULT_NAME;
-    static const QString DEFAULT_DESCRIPTION;
-    static const int DEFAULT_POLL_INTERVAL;
-    static const QString DEFAULT_FORMULA;        
-    static const int DEFAULT_NB_LINES;        
+    void setNbLines(int value);       
 
 private:
     void createFormulaInterpreter();
