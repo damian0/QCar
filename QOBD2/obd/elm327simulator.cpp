@@ -15,5 +15,9 @@ void Elm327Simulator::disconnect()
 
 QStringList Elm327Simulator::send(QString data)
 {
+}
+
+QStringList Elm327Simulator::send(QString data, int timeout)
+{
     return QStringList(data);
 }

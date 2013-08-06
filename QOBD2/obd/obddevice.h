@@ -16,11 +16,6 @@ public:
     explicit ObdDevice(AbstractObdHardware *obdHardware, QObject *parent = 0);
     virtual ~ObdDevice();
 
-    bool connectHardware();
-    void disconnectHardware();
-    void start();
-    void stop();
-    void pause();    
     void addPID(QString PIDName);
     void removePID(QString PIDName);
     void setPollInterval(QString PIDName, int interval);
@@ -28,22 +23,33 @@ public:
 
     /* Getters */
     QString getName() const;
+    bool isPaused() const;
+    bool isRunning() const;
+    bool isVehicleConnected() const;
 
 public slots:
+    void start();
+    void stop();
+    void pause();
+    void resume();
+    bool connectHardware();
+    void disconnectHardware();
     void logHardware(QString message);
     void errorHardware(QString err);
 
 private:
     void init();
+    void logF(QString message);
     void pollingLoop();
     int waitingTime();
     bool searchVehicle();
     ObdPidData requestPid(ObdPid* pid);
 
-    bool isRunning;
-    bool isPaused;
-    bool isVehicleConnected;
+    bool running;
+    bool paused;
+    bool vehicleConnected;
     int requestTimeout;
+    int pollingLoopFrequency;
     ObdResponseHandler responseHandler;
     AbstractObdHardware *obdHardware;
     QHash<QString,ObdPid*> allPIDsHash;
@@ -52,9 +58,9 @@ private:
     static const int PAUSE_DELAY_MS;
     
 signals:
-    void newData(ObdPidData PID);
-    void log(const QString);
-    void error(QString);
+    Q_SIGNAL void newData(const ObdPidData &pid);
+    Q_SIGNAL void log(const QString message);
+    Q_SIGNAL void error(QString err);
 };
 
 #endif // QOBDDEVICE_H

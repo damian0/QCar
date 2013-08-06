@@ -1,6 +1,8 @@
 #include "obdpid.h"
 #include <QDebug>
 
+int ObdPid::DEFAULT_POLL_INTERVAL = 20;
+
 ObdPid::ObdPid(QString pid, QString name, QString description, QString unit, int pollInterval, QString formula, int nbLines)
 {
     setPid(pid);

@@ -7,7 +7,7 @@
 Elm327Serial::Elm327Serial(SerialPortSettings settings, QObject *parent) : AbstractObdHardware(parent)
 {    
     setSettings(settings);
-    setTimeout(1000);
+    setTimeout(40);
     serialPort = 0;
     connected = false;
 }
@@ -77,7 +77,8 @@ bool Elm327Serial::connect()
     if(!ok) return false;
 
     connected = true;
-    deviceName = send("ATZ\r").first();
+    deviceName = send("ATZ\r", 1000).first();    
+
     emit log(QString("%1 : connected").arg(deviceName));
 
     return true;
@@ -105,6 +106,15 @@ QStringList Elm327Serial::send(QString data)
 
         return responseHandler.parseData(buffer);
     }
+}
+
+QStringList Elm327Serial::send(QString data, int timeout)
+{
+    int oldTimeout = this->timeout;
+    this->timeout = timeout;
+    QStringList response = this->send(data);
+    this->timeout = oldTimeout;
+    return response;
 }
 
 int Elm327Serial::getTimeout() const

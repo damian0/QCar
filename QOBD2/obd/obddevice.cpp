@@ -35,10 +35,10 @@ void ObdDevice::disconnectHardware()
 }
 
 void ObdDevice::start()
-{
-    if(!isRunning)
+{ 
+    if(!running && obdHardware->isConnected())
     {
-        isRunning = true;
+        running = true;
         pollingLoop();        
     }
 }
@@ -48,23 +48,35 @@ void ObdDevice::init()
     connect(obdHardware, &AbstractObdHardware::log, this, &ObdDevice::logHardware);
     connect(obdHardware, &AbstractObdHardware::error, this, &ObdDevice::errorHardware);
 
-    isPaused = false;
-    isRunning = false;
-    isVehicleConnected = false;    
+    paused = false;
+    running = false;
+    vehicleConnected = false;
+    requestTimeout = ObdPid::DEFAULT_POLL_INTERVAL;
+    pollingLoopFrequency = 0;
 
     allPIDsHash = PIDLoader::loadPIDs("./pids/");    
 
     qRegisterMetaType<ObdPidData>("ObdPidData");
 }
 
+void ObdDevice::logF(QString message)
+{
+    emit log(tr("%1 : %2").arg(obdHardware->getDeviceName()).arg(message));
+}
+
 void ObdDevice::stop()
 {
-    isRunning = false;    
+    running = false;
 }
 
 void ObdDevice::pause()
 {
-    isPaused = !isPaused;
+    paused = true;
+}
+
+void ObdDevice::resume()
+{
+    paused = false;
 }
 
 void ObdDevice::addPID(QString PIDName)
@@ -104,19 +116,22 @@ QHash<QString, QString> ObdDevice::availablePIDs()
 
 void ObdDevice::pollingLoop()
 {
-    QTime vehicleConnectedTime;
-    vehicleConnectedTime.start();
-    while(isRunning)
+    logF(tr("Polling loop started"));
+
+    QTime loopPeriod;
+
+    while(running)
     {        
-        if(!isVehicleConnected)
+        loopPeriod.restart();
+        if(!vehicleConnected)
         {
-            emit log(tr("%1 : searching vehicle ...").arg(obdHardware->getDeviceName()));
-            isVehicleConnected = searchVehicle();
+            logF(tr("searching vehicle ..."));
+            vehicleConnected = searchVehicle();
             QThread::msleep(PAUSE_DELAY_MS);
         }
-        else if(isPaused)
+        else if(paused)
         {
-            emit log(tr("%1 : paused ...").arg(obdHardware->getDeviceName()));
+            logF(tr("paused ..."));
             QThread::msleep(PAUSE_DELAY_MS);
         }
         else
@@ -127,12 +142,16 @@ void ObdDevice::pollingLoop()
                 {                    
                     ObdPidData data = requestPid(pid);
                     emit newData(data);
+                    logF(data.toString());
+                    //logF(QString("%1 %2").arg(pid->getName()).arg(pid->getPollTime()->elapsed()));
                     pid->getPollTime()->restart();
                 }
             }
             QThread::msleep(waitingTime());
         }
+        pollingLoopFrequency = 1000 / loopPeriod.elapsed();
     }
+    logF(tr("Polling loop finished"));
     disconnectHardware();
 }
 
@@ -149,21 +168,21 @@ int ObdDevice::waitingTime()
 
 ObdPidData ObdDevice::requestPid(ObdPid *pid)
 {
-    QString request = pid->getPid() + "\r";
-    QStringList response = obdHardware->send(request);
+    QString nbLines = (pid->getNbLines()  != 0) ? QString::number(pid->getNbLines()) : ""; //Adds the number of lines to the request, in order to speed up requests
+    QString request = QString("%1%2\r").arg(pid->getPid()).arg(nbLines);
+    QStringList response = obdHardware->send(request, requestTimeout);
+
+    vehicleConnected = responseHandler.isVehicleConnected(response);
 
     return ObdPidData(pid->getPid(), pid->getName(), pid->getDescription(), pid->computeValue(response), pid->getUnit());
 }
 
 bool ObdDevice::searchVehicle()
 {
-    QString request = "010C1\r";
-    QStringList response = obdHardware->send(request);
+    QString request = "01001\r";
+    QStringList response = obdHardware->send(request, 4000);
 
-    if(response.size() < 1)
-        return false;
-    else
-        return response.first().contains("OK");
+    return responseHandler.isVehicleConnected(response);
 }
 
 QString ObdDevice::getName() const
@@ -174,8 +193,23 @@ QString ObdDevice::getName() const
         return QString();
 }
 
-void ObdDevice::logHardware(QString message)
+bool ObdDevice::isPaused() const
 {
+    return paused;
+}
+
+bool ObdDevice::isRunning() const
+{
+    return running;
+}
+
+bool ObdDevice::isVehicleConnected() const
+{
+    return vehicleConnected;
+}
+
+void ObdDevice::logHardware(QString message)
+{        
     emit log(message);
 }
 

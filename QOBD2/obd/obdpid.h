@@ -15,7 +15,7 @@ public:
            QString name = QString("No name"),
            QString description = QString("No description"),
            QString unit = QString("No unit"),
-           int pollInterval = 100,
+           int pollInterval = 50,
            QString formula = QString(),
            int nbLines = 0);
     virtual ~ObdPid();
@@ -40,7 +40,9 @@ public:
     void setPollTime(QTime *value);
     void setPollInterval(int value);
     void setFormula(const QString &value);
-    void setNbLines(int value);       
+    void setNbLines(int value);
+
+    static int DEFAULT_POLL_INTERVAL;
 
 private:
     void createFormulaInterpreter();

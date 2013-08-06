@@ -11,6 +11,7 @@ public:
                QString description = QString("No description"),
                double value = 0.0,
                QString unit = QString("No unit"));
+    QString toString();
 
     /* Getters */
     QString getPid() const;
@@ -27,7 +28,6 @@ public:
     void setUnit(const QString &value);        
 
 private:
-
     QString pid;
     QString name;
     QString description;

@@ -8,6 +8,7 @@ class ObdResponseHandler
 public:
     ObdResponseHandler();
     QStringList parseData(QString rawData);
+    bool isVehicleConnected(QStringList response);
 };
 
 #endif // OBDRESPONSEHANDLER_H

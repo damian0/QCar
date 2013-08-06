@@ -9,6 +9,11 @@ ObdPidData::ObdPidData(QString pid, QString name, QString description, double va
     setUnit(unit);
 }
 
+QString ObdPidData::toString()
+{
+    return QString("PID Data : %1 %2 %3 %4").arg(pid).arg(name).arg(value).arg(unit);
+}
+
 QString ObdPidData::getPid() const
 {
     return pid;

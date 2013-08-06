@@ -53,7 +53,7 @@ bool PIDXMLHandler::endElement(const QString &namespaceURI, const QString &local
         if(!ok)
             nbLines = 0;
         ObdPid *pid = new ObdPid(currentPid, currentName,currentDescription,
-                                 currentUnit, 100,currentFormula, nbLines);
+                                 currentUnit, ObdPid::DEFAULT_POLL_INTERVAL, currentFormula, nbLines);
         (*pidsHash)[currentPid] = pid;
     }
     return true;

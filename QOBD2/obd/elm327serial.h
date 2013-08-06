@@ -18,6 +18,7 @@ public:
     bool connect();
     void disconnect();
     QStringList send(QString data);
+    QStringList send(QString data, int timeout);
 
     /* Getters */
     SerialPortSettings getSettings() const;

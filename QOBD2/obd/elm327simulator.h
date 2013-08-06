@@ -12,6 +12,7 @@ public:
     bool connect();
     void disconnect();
     QStringList send(QString data);
+    QStringList send(QString data, int timeout);
 };
 
 #endif // QELM327SIMULATOR_H

@@ -13,9 +13,11 @@ public:
     virtual bool connect() = 0;
     virtual void disconnect() = 0;    
     virtual QStringList send(QString data) = 0;
+    virtual QStringList send(QString data, int timeout) = 0;
 
     /* Getters */
-    virtual QString getDeviceName();
+    virtual QString getDeviceName() const;
+    virtual bool isConnected() const;
 
 protected:
     bool connected;

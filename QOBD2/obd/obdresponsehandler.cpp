@@ -19,3 +19,11 @@ QStringList ObdResponseHandler::parseData(QString rawData)
 
     return splittedData;
 }
+
+bool ObdResponseHandler::isVehicleConnected(QStringList response)
+{
+    if(response.size() < 1)
+        return false;
+    else
+        return response.first().at(0) == '4';
+}
